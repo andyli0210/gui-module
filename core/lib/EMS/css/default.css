@@ -1,0 +1,271 @@
+.EMSControlOverviewMapContainer {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+	cursor: pointer;
+}
+
+.EMSControlOverviewMapElement {
+    padding: 0px 0px 0px 0px;
+    /*background: url("../../img/frame.png");*/
+    /*background-color: #FFFFFF;*/
+    /*-moz-border-radius: 1em 0 0 0;*/
+}
+
+.EMSControlOverviewMapMinimizeButton {
+    bottom: 25px;
+    right: 145px;
+    _right: 144px; /* IE 6*/
+}
+
+.EMSControlOverviewMapMaximizeButton {
+    bottom: 25px;
+    right: 0px;
+    _right: -1px; /* IE 6*/
+}
+
+.EMSControlOverviewMapExtentRectangle {
+	cursor: url("../../img/grab.cur"), move;
+    border: 1px solid black;
+    background-color:#999999;
+    filter: alpha(opacity=70);
+    opacity: 0.7;
+}
+
+.EMSControlNorthArrow {
+    top: 6px;
+    right: 9px;
+    display: block;
+}
+
+.EMSControlCopyright {
+    bottom: 0px;
+    left: 0px;
+    display: block;
+}
+
+.LayersButtons .streetLayerSelector {
+}
+
+.LayersButtons .photoLayerSelector {
+    left: 38px;
+}
+
+.LayersButtons .contentDiv {
+    padding-left: 2px;
+    padding-top: 3px;
+    font-family: Arial;
+    font-size: 11px;
+    top: 0px;
+    left: 0px;
+    cursor: pointer;
+    color: #003366;
+}
+
+.LayersButtons .streetLayerSelector .contentDiv { padding-left: 8px; }
+.LayersButtons .photoLayerSelector .contentDiv { padding-left: 2px; }
+
+.LayersButtons .contentDiv a {
+    margin-left: 4px;    
+    font-size: 9px;
+}
+
+.emsControlPanButton-n, 
+.emsControlPanButton-s, 
+.emsControlPanButton-e, 
+.emsControlPanButton-w {
+	cursor: pointer;
+}
+
+.EMSControlOverviewMapMaximizeButton,
+.EMSControlOverviewMapMinimizeButton {
+	cursor: pointer;
+}
+
+.EMSControlScale {
+    font-family: Arial;
+    font-weight: bold;
+    left: 3px;
+    bottom: 27px;
+    display: block;
+    position: absolute;
+    background-image: url("../../img/scale_middle.png");
+    background-position: bottom;
+    background-repeat: repeat-x;
+}
+
+.EMSControlScale div {
+    background-image: url("../../img/scale_left.png");
+    background-position: bottom left;
+    background-repeat: no-repeat;
+}
+
+.EMSControlScale .EMSControlScaleText {
+    background-image: url("../../img/scale_end.png");
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+}
+
+.olPopupContent {
+    cursor: default;
+}
+
+.ems-history {
+    padding-left: 10px;
+    /* font-weight: bold; */
+}
+
+.ems-history .ems-top-back {
+    font-size: 16px;
+}
+
+.ems-history a {
+    font-family:Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    color: #3399ff;
+}
+
+.ems-top-back {
+    background: transparent url(../../img/first.gif) no-repeat scroll top left;
+    margin-top: 5px;
+    width: 7px;
+    height: 5px;
+    left: 4px;
+    position: absolute;
+}
+
+.ems-back {
+	margin-left: 5px;
+}
+
+.ems-history a:link, .ems-history a:visited, .ems-history a:active {
+    text-decoration: none;
+}
+
+.ems-history a:hover {
+    text-decoration: underline;
+}
+
+.ems-multipoi-count {
+    font-family:Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    color: #000099;
+    padding-left: 3px;
+    padding-top: 8px;
+}
+
+.emsPopupContent {
+	border-top: 1px solid #58a2d1;
+	padding: 2px;
+}
+
+.emsPopupTabOn {
+	font-family:Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+	line-height: 30px;
+    color: #3399ff;
+    text-align: center;
+    background: transparent url(../../img/tab_bg.gif) repeat scroll top left;
+    
+}
+
+.emsPopupTabOff {
+	font-family:Arial,Helvetica,sans-serif;
+    font-size: 11px;
+   	line-height: 30px;
+    color: #3399ff;
+    text-align: center;
+}
+
+.emsPopupTabHover {
+	font-family:Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    text-decoration: underline;
+    color: #3399ff;
+  	line-height: 30px;
+    text-align: center;
+}
+
+.emsPopupMenu {
+	width: 100%;
+	height: 100%;
+	font-size: 11px;
+}
+
+.emsPopupMenuOption {
+	border: 1px solid #CCC;
+	width: 100%;
+	background: lightgrey;
+	height: 20px;
+	vertical-align: middle;
+	cursor: pointer;
+	padding: 2px;
+	color: blue;
+	text-indent: 10px;
+}
+
+.emsPopupGroup {
+    border: 2px solid #9f9f9d;
+    cursor: default;
+    background-color: white;
+}
+
+.EMSZoombarScale {
+    cursor: default;
+}
+
+.emsRouteInstructions {
+	overflow-y: auto;
+	color: #003366;
+	font-size: 11px;
+	font-family: Arial,Helvetica,sans-serif;
+}
+
+.emsRouteInstructions strong{
+	font-weight: bold;
+}
+
+
+#emsRoutePopup_contentDiv .emsRouteLinks {
+	color: #3597FF;
+	font-size: 11px;
+	font-family: Arial,Helvetica,sans-serif;
+}
+
+#emsRoutePopup_contentDiv .emsRouteLinks .emsDisabled {
+	cursor: default !important;
+	text-decoration: none !important;
+	color: #CCCCCC;	
+}
+
+#emsRoutePopup_contentDiv .emsPreviousLink {
+	float: left;
+	color: #3597FF;
+	text-decoration: none;
+}
+
+#emsRoutePopup_contentDiv .emsNextLink {
+	float: right;
+	color: #3597FF;
+	text-decoration: none;
+}
+
+#emsRoutePopup_contentDiv .emsZoomToLink {
+	color: #3597FF;
+	text-decoration: none;
+	padding-left: 15px;
+	background: transparent url(../../img/zoom_to.gif) no-repeat scroll left center;
+}
+
+
+.emsHover{
+	text-decoration: underline;
+}
+
+.emsRouteMap {
+	border: 1px solid #9F9F9D;
+}
+
+

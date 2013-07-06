@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Slide Panel Test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="Panel-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript" src="test/testPlayers.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                slidePanel = new IFL.Panel.TopSlidePanel({
+                    width: 200,
+                    height: 200
+                });
+                
+                $(document.body).append(slidePanel.getContainer());
+                debugger;
+                slidePanel.setPlayerScores(players);
+            });
+        </script>
+    </head>
+    <body>
+        <!--<div id="mapContainer" style="top:0px; left:0px; right:0px; height:100%; position:absolute; z-Index:1;"></div>-->
+    </body>
+</html>

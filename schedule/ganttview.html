@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title></title>
+        <!--<link type="text/css" href="../core/css/cupertino/jquery-ui-1.8.18.custom.css" rel="stylesheet"/>-->
+        <!--                <link type="text/css" href="../css/le-frog/jquery-ui-1.8.6.custom.css" rel="stylesheet"/>-->
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script> 
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="Schedule-Config.js"></script>
+        <script type="text/javascript" src="widgets/VehicleLoad.js"></script>
+        <!--        <script type="text/javascript" src="main-gantt.js"></script>-->
+
+
+        <script type="text/javascript">
+            var ganttService;
+            var mapservice;
+            var routes;
+            var onReadyHandler;
+            
+            IFL.ready(function() {
+                $(function() {
+                    //init();
+                    test();
+                    
+                });
+            });
+            
+            function test() {
+                var options = {
+                    keyTitleMapping: {
+                        resourceId: 'Resource',
+                        scheduleId: 'Schedule',
+                        travelTime: 'Travel Time',
+                        serviceTime: 'Service Time',
+                        vehicleLoad: 'Vehicle Load'
+                    }
+                }
+                testTable = new IFL.Widget.GanttChartTable(options);
+                testTable.getContainer().appendTo($('#mainContainer'));
+                
+                //testTable.setRowItems(testData());
+                
+                testTable.refreshWithRoutes([]);
+                //readFile('ifl-translated-730-limitMonth_out.xml');
+                
+                ganttService = testTable.getGanttService();
+                if (routes) {
+                    testTable.refreshWithResourceRoutes(routes);
+                }
+                    
+                if (onReadyHandler) {
+                    onReadyHandler(ganttService, testTable);
+                }
+            }
+            
+            function testData() {
+                var resources  = [];
+                resource1 = {
+                    id:'resource1',
+                    name: 'resour123'
+                }
+                
+                resource2 = {
+                    id: 'resource2',
+                    name: 'resource222'
+                }
+                
+                resources.push(resource1);
+                resources.push(resource2);
+                
+                return resources;
+            }
+            
+            function init() {
+//                var chartContainer = $('<div id="chartContainer" style="width: 800px; height: 600px;"/>').appendTo($('#mainContainer'));
+//                ganttService = new IFL.Schedule.GanttService({
+//                    containerId: 'chartContainer'
+//                });
+                    
+                if (routes) {
+                    ganttService.refreshWithRoutes(routes);
+                }
+                    
+                if (onReadyHandler) {
+                    onReadyHandler(ganttService);
+                }
+            }
+            
+            function refreshWithRoutes(_routes) {
+                routes = _routes;
+                    
+                if (ganttService) {
+                    ganttService.refreshWithRoutes(routes);
+                }
+            }
+            
+            function highlightTask(service, isHighlight) {
+                if (ganttService) {
+                    ganttService.highlightTask(service, isHighlight);
+                }
+            }
+            
+            function getService() {
+                return ganttService;
+            }
+            
+            function setMapService(_service) {
+                mapservice = _service;
+            }
+            
+            function readFile(url) {
+                var xmlProcessor = new IFL.Schedule.XmlProcessor({
+                    schemaName: 'IFL'
+                });
+                
+                jQuery.ajax({
+                    type: "GET",
+                    url: url,
+                    dataType: 'xml',
+                    success: function(xml) {
+                        var results = xmlProcessor.processXml(xml);
+                
+                        testTable.refreshWithRoutes(results.routes);
+                    }
+                })
+            }
+            
+        </script>
+    </head>
+    <body>
+        <!--        <div id="chartContainer" style="left: 20px; right: 10px; top: 20px; bottom: 5px; position: absolute;">
+                    
+                </div> -->
+        <div id="mainContainer" style="left: 20px; right: 10px; top: 20px; bottom: 5px; position: absolute;"></div>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<title>CTS</title>-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRikCDBM62F2WIU6WoWDYPDJLQOlHSCDM&sensor=false"></script>
+
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="../core/layout/Layout-config.js"></script>
+        <script type="text/javascript" src="../route-geo/RouteGeo-Config.js"></script>
+        <script type="text/javascript" src="RT-Routes-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+        
+         <script type="text/javascript" src="input-js/FRIDAY.js"></script>
+         <script type="text/javascript" src="input-js/MONDAY.js"></script>
+         <script type="text/javascript" src="input-js/SATURDAY.js"></script>
+         <script type="text/javascript" src="input-js/THURSDAY.js"></script>
+         <script type="text/javascript" src="input-js/TUESDAY.js"></script>
+         <!--<script type="text/javascript" src="input-js/WEDNESDAY.js"></script>-->
+          <script type="text/javascript" src="input-js/Auckland-cts-schedule.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    var mapservice = new IFL.RTRoutes.MapService({
+                                mapContainerId: 'mapContainer'
+                            });
+                    
+                    mapservice.displayRTRoutes(aucklandRoutes);
+                    //mapservice.displayRTRoute(weeklyRoute.routes[0]);
+                    
+                })
+            });
+            
+            function getCtsOptSolution(optId, callback) {
+                var url = Config.ctsServerUrl + "/opt/solution/" + optId + '?routeIds=summary';
+                console.info('trying to get CTS Opt Solution at: ' + url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(solution) {
+                        console.info('Successfully get CTS OPT Solution: ');// + JSON.stringify(solution));
+                        callback(solution);
+                    },
+                    error: function() {
+                        console.error('Failed to get CTS OPT Solution !!!');
+                        alert('Failed to get CTS OPT Solution !!!')
+                    }
+                })
+            }
+            
+            function getCtsOptInfo(optId, callback) {
+                var url = Config.ctsServerUrl + "/opt/info/" + optId + "?noParameters=false";
+                console.info('trying to get CTS Opt Info at: ' + url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.info('Successfully get CTS OPT parameters ');// + JSON.stringify(solution));
+                        callback(response.ctsOptInfo);
+                    },
+                    error: function() {
+                        console.error('Failed to get CTS OPT parameters !!!');
+                        alert('Failed to get CTS OPT parameters !!!')
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div id ="mapContainer" style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px;"></div>
+    </body>
+</html>

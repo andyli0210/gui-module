@@ -1,0 +1,4 @@
+IFL.Widget.Searcher = function() {
+    
+}
+

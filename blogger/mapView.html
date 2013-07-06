@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<title>CTS</title>-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRikCDBM62F2WIU6WoWDYPDJLQOlHSCDM&sensor=false"></script>
+
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="blogger-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+        <script type="text/javascript" src="test-data/routeJson.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                            var mapservice = new MapService({
+                                mapContainerId: 'mapContainer'
+                            });
+
+                            var drawOptions = {
+                                showRouteDirection: true,
+                                showVehAnimation: true,
+                                showDeliverySeq: true,
+                                scaleByGpad: false
+                            }
+
+                            mapservice.displayOptSolution(rotueJson, {}, drawOptions);
+
+                })   
+            });
+
+            function getCtsOptSolution(optId, callback) {
+                var url = Config.ctsServerUrl + "/opt/solution/" + optId;
+                if (!Config.routeDays && !Config.routeIds) {
+                    url += '?routeDays=summary';
+                } else {
+                    url += '?routeDays=' + Config.routeDays + '&routeIds=' + Config.routeIds;
+                }
+
+                console.info('trying to get CTS Opt Solution at: ' + url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(solution) {
+                        console.info('Successfully get CTS OPT Solution: ');// + JSON.stringify(solution));
+                        callback(solution);
+                    },
+                    error: function() {
+                        console.error('Failed to get CTS OPT Solution !!!');
+                        alert('Failed to get CTS OPT Solution !!!')
+                    }
+                })
+            }
+
+            function getCtsOptInfo(optId, callback) {
+                var url = Config.ctsServerUrl + "/opt/info/" + optId + "?noParameters=false";
+                console.info('trying to get CTS Opt Info at: ' + url);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.info('Successfully get CTS OPT parameters ');// + JSON.stringify(solution));
+                        callback(response.ctsOptInfo);
+                    },
+                    error: function() {
+                        console.error('Failed to get CTS OPT parameters !!!');
+                        alert('Failed to get CTS OPT parameters !!!')
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div id ="mapContainer" style="position: absolute; top: 0px; bottom: 0px; left: 0px; right: 0px;"></div>
+    </body>
+</html>

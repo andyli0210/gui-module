@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tree View Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="CTS-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript" src="testData/testGroups.js"></script>
+        <script type="text/javascript" src="testData/testcustomerGroup.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    //testBasicTrees();
+                    
+                    //testInclusions();
+                    //testArriveTime();
+                    
+                    //testDeliveryFee();
+                    //testUnitPrice();
+                   // testTabs();
+                    
+                    //initSummaryTable();
+                    //initOptStatusTable();
+                    //tooltipTest();
+                    
+                    testOptPage();
+                })
+            });
+            
+            function testOptPage() {
+                letterIndex = 65;
+                var dateFormat = 'dd/MM/yyyy hh:mm:ss'
+                
+                optPagePanel = new IFL.CTS.CTSOptPanel();
+                $('#mainContainer').append(optPagePanel.getContainer());
+                
+                var dataValueList = {"national":"Input Data","vehicles":"9","routeNum":"9","cusNum":"250","gpad":"$1,134,814","grossMargin":"$1,381,247","varCost":"$63,562","fixCost":"$182,871","volWeek":"156,014","volMF":"114,422","distance":"10,464","duration":"423"}
+                
+                optPagePanel.registerHandler('run', function() {
+                    var curTime = new Date();
+                    var startTime = formatDate(curTime, dateFormat);
+                    var optInfo = {
+                        startTime: startTime,
+                        name: 'Optimisation ' + String.fromCharCode(letterIndex++)
+                    }
+                    
+                    optPagePanel.addOptimisation(optInfo);
+                    
+                    setTimeout(function(){
+                        optPagePanel.setOptCompleted(optInfo.name);
+                        optPagePanel.addDataSummary(optInfo.name, dataValueList);
+                    }, 3000);
+                });
+            }
+            
+            function tooltipTest() {
+                optStatusTable.getContainer().qtip({
+                    content: 'Presets, presets and more presets. Let\'s spice it up a little with our own style!',
+                    position: {
+                        corner: {
+                            target: 'rightMiddle',
+                            tooltip: 'topLeft'
+                        }
+                    },
+                    style: { 
+                        width: 200,
+                        padding: 5,
+                        background: '#A2D959',
+                        color: 'black',
+                        textAlign: 'center',
+                        border: {
+                            width: 7,
+                            radius: 5,
+                            color: '#A2D959'
+                        },
+                        tip: 'topLeft',
+                        name: 'dark' // Inherit the rest of the attributes from the preset dark style
+                    },
+                    show: {
+                        ready: true,
+                        when: {
+                            event: false
+                        }
+                    },
+                    hide: 'click'
+                }
+            )
+            }
+            
+            function initOptStatusTable() {
+                optStatusTable = new IFL.CTS.OptimisationStatusTable();
+                $('#mainContainer').append(optStatusTable.getContainer());
+                
+                optStatusTable.addOptimisation({
+                    name: 'Opt A',
+                    startTime: '12:10'
+                })
+            }
+            
+            function initSummaryTable() {
+                var dataValueList = {"national":"Input Data","vehicles":"9","routeNum":"9","cusNum":"250","gpad":"$1,134,814","grossMargin":"$1,381,247","varCost":"$63,562","fixCost":"$182,871","volWeek":"156,014","volMF":"114,422","distance":"10,464","duration":"423"}
+                var table = new IFL.CTS.DataSummaryTable();
+                
+                table.addDataColumn('Base Case',dataValueList);
+                table.addDataColumn('Route Optimasation',dataValueList);
+                
+                $('#mainContainer').append(table.getContainer());
+            }
+            
+            function testTabs() {
+                var tabs = new IFL.CTS.CustomerParaTabs({
+                    contentWidth: 500
+                }, testGroups2);
+                $('#mainContainer').append(tabs.getContainer());
+            }
+            
+            function testUnitPrice() {
+                var feeWidget = IFL.CTS.CustomerUnitPriceWidget({}, testGroups, true);
+                $('#mainContainer').append(feeWidget.getContainer());
+            }
+            
+            function testDeliveryFee() {
+                var feeWidget = IFL.CTS.CustomerDeliveryFeeWidget({}, testGroups, true);
+                $('#mainContainer').append(feeWidget.getContainer());
+            }
+            
+            function testInclusions() {
+                var inclusionWidget = IFL.CTS.CustomerInclusionWidget({treeWidth: 150}, testGroups, true);
+                $('#mainContainer').append(inclusionWidget.getContainer());
+            }
+            
+            function testArriveTime() {
+                var arriveTimeWidget = IFL.CTS.CustomerArriveTimeWidget({}, testGroups, true);
+                $('#mainContainer').append(arriveTimeWidget.getContainer());
+            }
+            
+            function testBasicTrees() {
+                var treeWidget = new IFL.Widget.TreeWidget({itemSummary: $('<div style="color: red">tree 1</dic>')});
+                treeWidget.addItems(['item1','item2']);
+                    
+                var rootTreeWiget = new IFL.Widget.TreeWidget({isRoot: true});
+                rootTreeWiget.addItems([treeWidget, 'item3']);
+                    
+                rootTreeWiget.initTreeStyle();
+                $('#mainContainer').append(rootTreeWiget.getContainer());
+            }
+            
+        </script>
+    </head>
+    <body>
+        <div id="mainContainer" style="width: 800px; height: 500px;">
+        </div>
+    </body>
+</html>

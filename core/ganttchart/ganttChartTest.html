@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title></title>
+        <link type="text/css" href="../css/cupertino/jquery-ui-1.7.3.custom.css" rel="stylesheet"/>
+<!--                <link type="text/css" href="../css/le-frog/jquery-ui-1.8.6.custom.css" rel="stylesheet"/>-->
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../../LAB.js"></script> 
+        <script type="text/javascript" src="../../IFL-Config.js"></script> 
+        <script type="text/javascript" src="../../IFL.js"></script>
+        <script type="text/javascript" src="GanttChartService.js"></script>
+
+                <script type="text/javascript" src="testmain.js"></script> 
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    new AppStarter();
+                    //                    ganttService = new IFL.GanttChart.GanttChartService('chartContainer')
+                    //
+                    //                    domain1 = {
+                    //                        getStartTime: function(){return new Date('2011-10-12T18:16:53.351+11:00')}, 
+                    //                        getEndTime: function() {return new Date('2011-10-12T19:16:53.351+11:00')}
+                    //                    }
+                    //                    
+                    //                    domain2 = {
+                    //                        getStartTime: function(){return new Date('2011-10-12T20:16:53.351+11:00')}, 
+                    //                        getEndTime: function() {return new Date('2011-10-12T21:16:53.351+11:00')}
+                    //                    }
+                    //
+                    //                    rowItem = new IFL.GanttChart.ChartItem(domain1, {rowIndex: 1});
+                    //                    //rowItem2 = new IFL.GanttChart.ChartItem(domain2, 1, {});
+                    //
+                    //                    row = new IFL.GanttChart.ChartRow([rowItem], {title: 'route-1'})
+                    //
+                    //                    ganttService.addRow(row,true)
+
+                    //ganttService.addItem(rowItem,true)
+                    //ganttService.addItem(rowItem2,true)
+                    Config.imagePath = '../images';
+                    //widget = new IFL.Widget.ListWidget(['item1','item2','item3','item4','item5','item6','item7'], 'Title', 500, 100)
+                    //widget.getContainer().appendTo($('#chartContainer'));
+                    
+                    domain = {
+                        id: '123',
+                        'item 1': 'abc',
+                        a: 1,
+                        b: 2
+                    }
+                    
+                    nameMapping = {
+                        id: 'My ID',
+                        'item 1': 'My Itye'
+                    }
+                    myTable = new IFL.Widget.DomainTable(domain, nameMapping, true);
+                    
+                    //myTable.getTable().appendTo($('#chartContainer'));
+                })
+            });
+        </script>
+    </head>
+    <body>
+<!--        <div id="container" style="height: 600px; width: 800px; font-size: 11px; position: absolute;">
+            <div id="chartContainer" style="width: 90%;height: 80%;"></div> 
+                        <input type="button" value="show in dialog" id="button" style="margin-top: 10px"/>
+                        <input type="button" value="add route" id="addbutton" style="margin-top: 10px"/>
+        </div>
+                <div id="chartContainer" style="top: 5px; left: 5px; width: 800px; height: 600px"></div>-->
+
+        <div id="chartContainer" style="left: 5px; right: 305px; top: 5px; bottom: 5px; position: absolute;"></div> 
+        <div id="controlPanel" style="right: 5px; width: 300px; top: 5px; bottom: 5px; position: absolute; padding-left: 5px;"></div>
+    </body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Grid Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="RouteGeo-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript">
+            var addressWidget;
+            IFL.ready(function() {
+                $(function() {
+                    var myGrid = new IFL.RouteGeo.GeoGrid({containerId: 'list'});
+                    
+                    addressWidget = new IFL.RouteGeo.AddressDetailsWidget();
+                    $('body').append(addressWidget.getContainer());
+                    
+                    addressMatchWidget = new IFL.RouteGeo.AddressMatchWidget();
+                    $('body').append(addressMatchWidget.getContainer());
+                    
+                    addressCriteriaWidget = new IFL.RouteGeo.AddressCriteriaWidget();
+                    $('body').append(addressCriteriaWidget.getContainer());
+                    
+                    addressChosenWidget = new IFL.RouteGeo.AddressChosenWidget();
+                    $('body').append(addressChosenWidget.getContainer());
+                })
+            });
+        </script>
+    </head>
+    <body>
+    <body>
+        <table id="list"><tr><td/></tr></table> 
+        <div id="pager"></div> 
+    </body>
+</body>
+</html>

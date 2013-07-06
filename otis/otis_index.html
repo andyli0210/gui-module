@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title></title>
+        <!--        <link type="text/css" href="gui/core/css/cupertino/jquery-ui-1.7.3.custom.css" rel="stylesheet"/>-->
+        <link type="text/css" href="../core/css/le-frog/jquery-ui-1.8.6.custom.css" rel="stylesheet"/>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!--        <script type="text/javascript" src="gui/core/lib/jquery/jquery-1.3.2.min.js"></script> -->
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL-Config.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="OtisMapService.js"></script>
+        <script type="text/javascript" src="TechRoutePanel.js"></script>
+        <script type="text/javascript" src="DateRoutePanel.js"></script>
+        <script type="text/javascript" src="OptionPanel.js"></script>
+        
+        <script type="text/javascript" src="main.js"></script> 
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    new AppStarter();
+                    //test()
+                    //                    
+                })
+            });
+            
+            function test() {
+                icon = {url: Config.imagePath + '/fleet_tab_right.png', width: 26, height: 140}
+                panel = new IFL.Widget.SidePanel(icon, 'right', 100, 500, 'test')
+                radio = new IFL.Widget.RadioGroup('type', ['a', 'b'], 'b')
+                panel.addContent(radio.getContainer())
+                radio2 = new IFL.Widget.RadioGroup('type2', ['c', 'd'], 'c', true)
+                panel.addContent(radio2.getContainer())
+            }
+            
+            function initMapService() {
+                mapService = new IFL.MapService.EMS('mapContainer');
+                otisMapService = new OtisMapService(mapService);
+                //otisMapService.readCSVFile('route_data1.csv', 'route');
+                //otisMapService.readCSVFile('locations_data.csv');
+            }
+            
+            function initFileUpload() {
+                $('#fileForm').submit(function() { 
+                    // submit the form 
+                    $(this).ajaxSubmit({
+                        dataType: 'text',
+                        url: 'upload',
+                        success: function(uploadedCSV, status) {
+                            console.debug('uploaded succeed !!');
+                            var type = $('input[name=type]:checked').val();
+                            console.debug('file type: ' + type);
+                            
+                            $('#mapContainer').show();
+                            $('#filePanel').hide();
+                            initMapService();
+                            
+                            otisMapService.processFileData(uploadedCSV, type);
+                        }
+                    }); 
+                    // return false to prevent normal browser submit and page navigation 
+                    return false; 
+                });
+                
+                $('input[name=type]').change(function() {
+                    var type = $('input[name=type]:checked').val();
+                    if (type == 'route') {
+                        $('#datePanel').show();
+                    } else {
+                        $('#dateField').val('');
+                        $('#datePanel').hide();
+                        
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div id="mapContainer" style="top: 0px; bottom: 0px; right: 0px; left: 0px; position: absolute;"></div>
+    </body>
+</html>

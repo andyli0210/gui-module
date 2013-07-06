@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Checker Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="CTS-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript" src="testData/testRopSolution.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    //initCTSChart();
+                    //initChartTable();
+                    initCtsChartTable()
+                })
+                
+                function initCtsChartTable() {
+                    ctsChartTable = new IFL.CTS.GanttChartTable({});
+                    ctsChartTable.getContainer().appendTo($('#mainContainer'));
+                    
+                    ctsChartTable.displayRopRoutes(ropSolution.routes.route);
+                }
+                
+                function initChartTable() {
+                    chartTable = new IFL.Widget.GanttChartTable({
+                        keyTitleMapping: {
+                            resourceId: 'Resource ID'
+                        }
+                    });
+                    chartTable.getContainer().appendTo($('#mainContainer'));
+                    
+                    var tableItems = [{
+                            id: 123,
+                            resourceId: 123
+                        },
+                        {
+                            id: 456,
+                            resourceId: 456
+                        }];
+                    
+                    chartTable.setTableItems(tableItems);
+                    
+                    var ganttItems = [];
+                    var currentDate = new Date();
+                    var testItem1 = {
+                        start: currentDate.getTime() - 199999,
+                        end: currentDate.getTime() + 199999,
+                        rowIndex: 10    
+                    }
+                    
+                    var testItem2 = {
+                        start: currentDate.getTime() - 299999,
+                        end: currentDate.getTime() + 299999,
+                        rowIndex: 9
+                    }
+                    
+                    var row1 = {
+                        chartItems: [testItem1]
+                    }
+                    
+                    var row2 = {
+                        chartItems: [testItem2]
+                    }
+                    
+                    ganttItems.push(row1);
+                    ganttItems.push(row2);
+                    
+                    chartTable.setGanttItems(ganttItems);
+                }
+                
+                function initCTSChart() {
+                    var container = $('<div id="ganttContainer"/>').css({
+                        width: 600,
+                        height: 600
+                    });
+                    var currentDate = new Date();
+                    var testItem1 = {
+                        start: currentDate.getTime() - 199999,
+                        end: currentDate.getTime() + 199999,
+                        rowIndex: 1
+                    }
+                    
+                    var testItem2 = {
+                        start: currentDate.getTime() - 299999,
+                        end: currentDate.getTime() + 299999,
+                        rowIndex: 2
+                    }
+                    
+                    container.appendTo($('#mainContainer'));
+                    
+                    chartService = new IFL.GanttChart.GanttChartService({
+                        containerId: 'ganttContainer'
+                    });
+                    
+                    chartService.addRow({rowIndex: 1});
+                    chartService.addRow({rowIndex: 2});
+                    chartService.addItem(testItem1);
+                    chartService.addItem(testItem2);
+                    
+                    chartService.refreshPlot();
+                    
+                    chartService.registerHandler('mouseover', function(item) {
+                        chartService.highlightChartItem(item, true);
+                    });
+                    
+                    chartService.registerHandler('mouseout', function(item) {
+                        chartService.highlightChartItem(item, false);
+                    });
+                }
+            });
+            
+        </script>
+    </head>
+    <body>
+        <div id="mainContainer" style="width: 600px; height: 600px">
+        </div>
+    </body>
+</html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : gridData.xml
+    Created on : 31 May 2012, 11:13 AM
+    Author     : yanli
+    Description:
+        Purpose of the document follows.
+-->
+
+<invoices> 
+    <currentpage>1</currentpage>
+    <totalpages>2</totalpages>
+    <totalrecords>6</totalrecords>
+    <result> 
+        <invoice id="12345"> 
+            <invoiceno>1</invoiceno>
+            <invoicedate>data for 1</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes><![CDATA[<font color='red'>cell</font> content]]></notes> 
+        </invoice>
+        <invoice id="00002"> 
+            <invoiceno>2</invoiceno>
+            <invoicedate>data2</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes>data6</notes> 
+        </invoice> 
+        <invoice id="00003"> 
+            <invoiceno>3</invoiceno>
+            <invoicedate>data2</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes>data6</notes> 
+        </invoice> 
+        <invoice id="0004"> 
+            <invoiceno>4</invoiceno>
+            <invoicedate>data2</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes>data6</notes> 
+        </invoice>
+        <invoice id="0005"> 
+            <invoiceno>5</invoiceno>
+            <invoicedate>data2</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes>data6</notes> 
+        </invoice>
+        <invoice id="0006"> 
+            <invoiceno>6</invoiceno>
+            <invoicedate>data2</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes>data6</notes> 
+        </invoice>
+        <invoice id="0007"> 
+            <invoiceno>7</invoiceno>
+            <invoicedate>data2</invoicedate> 
+            <invoiceamount>data3</invoiceamount> 
+            <invoicetax>data4</invoicetax> 
+            <invoicetotal>data5</invoicetotal> 
+            <notes>data6</notes> 
+        </invoice>
+    </result> 
+</invoices>

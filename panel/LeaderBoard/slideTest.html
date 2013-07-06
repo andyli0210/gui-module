@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<title>CTS</title>-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRikCDBM62F2WIU6WoWDYPDJLQOlHSCDM&sensor=false"></script>
+
+        <script type="text/javascript" src="../../LAB.js"></script> 
+        <script type="text/javascript" src="../../IFL.js"></script>
+        <script type="text/javascript" src="../../core/Core-Config.js"></script>
+        <script type="text/javascript" src="../../slide/SlideShow-Config.js"></script>
+        <script type="text/javascript" src="LeaderBoard-config.js"></script>
+        <script type="text/javascript" src="../../IFL-Config.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                slide = new IFL.LeaderBoard.SlideShowService();
+                $('#mainContainer').append(slide.getContainer());
+            })
+        </script>
+    </head>
+    <body>
+        <div id="mainContainer">
+        </div>
+    </body>
+</html>

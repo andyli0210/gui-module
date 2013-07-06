@@ -1,0 +1,30 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Socket IO Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../core/lib/jquery/jquery-1.7.1.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(function() {
+                poll();
+            })
+            
+            function poll(){
+                $.ajax({ url: "/gui-module/update/mapaction", success: function(meg){
+                        //Update your dashboard gauge
+                        $('body').append(meg);
+
+                    }, dataType: "text", complete: poll, timeout: 100000 });
+            }
+        </script>
+    </head>
+    <body>
+        <div>Socket IO Test</div>
+        <a href="/gui-module/j_spring_security_logout">Log out</a>
+
+    </body>
+</html>

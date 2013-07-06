@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+ <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Flot Examples</title>
+    <link href="layout.css" rel="stylesheet" type="text/css">
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="../excanvas.min.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="../jquery.js"></script>
+    <script language="javascript" type="text/javascript" src="../jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="../jquery.flot.navigate.js"></script>
+	<script language="javascript" type="text/javascript" src="../date.js"></script>
+ </head>
+    <body>
+    <h1>IFL Gantt Chart Examples</h1>
+
+    <div id="placeholder" style="width:600px;height:300px;"></div>
+
+
+<script id="source">
+var route_data = [];
+
+var markings = [];
+
+var colors = ['red', 'blue', ''];
+
+function parseRouteData(route, y, height) {
+
+	console.log('in parseRouteData, y=' + y);
+	
+	var index = route.id;
+	for (var v in route.visits) {
+		var visit_data = [];
+		var visit = route.visits[v];
+		var start_time = visit.start_time;
+		var latest_time = visit.latest_time;
+		
+		var start_millisecs = Date.parse(start_time).getTime();
+		var end_millisecs = Date.parse(latest_time).getTime();
+		
+		visit_data.push([start_millisecs,y+height/2, y - height/2 ]);
+		
+		var content = 'Visit Id: ' + visit.id;
+		
+		// visit series
+		route_data.push({
+			tooltip: content,
+			color: 'blue',
+			data:visit_data,
+			bars: {
+				barWidth: (end_millisecs - start_millisecs),
+				fill: false,
+				lineWidth: 1,
+				fillColor: 'blue'
+			}
+		}); 
+		
+		// visit start series
+		route_data.push({
+			data: [[start_millisecs - 60*1000*10, y]],
+			bars: {
+				show: false,
+				barWidth: 1000,
+				fillColor: 'blue'
+			},
+			points: {
+				show: true,
+				lineWidth: 0,
+				fill: false,
+				radius: 0
+			}
+		});
+		
+		// visit start markings
+		var marking = {
+			xaxis: {from: start_millisecs,to: end_millisecs},
+			yaxis: {from: y-height/2, to: y-height/2},
+			lineWidth: 1,
+			color: 'blue'
+		}
+		
+		markings.push(marking);
+		
+		marking = {
+			xaxis: {from: start_millisecs - 60*1000*10,to: start_millisecs - 60*1000*10 },
+			yaxis: {from: y-height/2-0.1, to: y+height/2+0.1},
+			lineWidth: 1,
+			color: 'blue'
+		}
+		
+		markings.push(marking);
+		marking = {
+			xaxis: {from: start_millisecs - 60*1000*10,to: start_millisecs - 60*1000*10 + 60*1000*10 },
+			yaxis: {from: y+height/2 + 0.1, to: y+height/2 + 0.1},
+			color: 'blue'
+		}
+		markings.push(marking);
+		
+		// visit bottom line
+		marking = {
+			xaxis: {from: start_millisecs - 60*1000*10,to: start_millisecs - 60*1000*10 + 60*1000*10 },
+			yaxis: {from: y-height/2-0.1, to: y-height/2-0.1},
+			color: 'blue'
+		}
+		
+		markings.push(marking);
+		
+		
+		// vehicle marker
+		route_data.push({
+			data: [[start_millisecs + (end_millisecs - start_millisecs)/2, y]],
+			bars: {
+				show: false
+			},
+			points: {
+				show: true
+			}
+		});
+	}
+
+}
+
+function parseRouteDatas(routes, space) {
+	//console.log('in parseRouteDatas, space=' + space);
+	route_data = [];
+	
+	for (var r in routes) {
+		var route = routes[r];
+		var y = space*(parseInt(r)+1);
+		var height = space/2;
+		
+		//debugger;
+		//console.log('in parseRouteDatas, y=' + y);
+		parseRouteData(route, y ,height);			
+		
+	}
+}
+
+$(function () {
+
+
+	var route = {
+		id: 1,
+		visits: [
+			{
+				'id': 123,
+				'earliest_time': '23/08/2010 02:31:07',
+				'latest_time': '23/08/2010 03:31:07'
+				
+			},
+			{
+				'id': 456,
+				'earliest_time': '23/08/2010 08:45:07',
+				'latest_time': '23/08/2010 09:30:07'
+			},
+			{
+				'id': 789,
+				'earliest_time': '23/08/2010 10:31:07',
+				'latest_time': '23/08/2010 13:25:07'
+			}
+		]
+	}
+	
+	var route2 = {
+		id: 2,
+		visits: [
+			{
+				'id': 223,
+				'earliest_time': '24/08/2010 02:31:07',
+				'latest_time': '24/08/2010 03:31:07'
+				
+			},
+			{
+				'id': 256,
+				'earliest_time': '24/08/2010 08:45:07',
+				'latest_time': '24/08/2010 09:30:07'
+			},
+			{
+				'id': 289,
+				'earliest_time': '24/08/2010 10:31:07',
+				'latest_time': '24/08/2010 13:25:07'
+			}
+		]
+	}
+	
+	var route3 = {
+		id: 3,
+		visits: [
+			{
+				'id': 323,
+				'earliest_time': '23/08/2010 05:00:07',
+				'latest_time': '23/08/2010 06:31:07'
+				
+			},
+			{
+				'id': 356,
+				'earliest_time': '23/08/2010 07:45:07',
+				'latest_time': '23/08/2010 08:30:07'
+			},
+			{
+				'id': 389,
+				'earliest_time': '23/08/2010 10:31:07',
+				'latest_time': '23/08/2010 11:25:07'
+			}
+		]
+	}
+	
+	routes = [route, route2, route3];
+	
+	
+	//parseRouteDatas(routes, 0, 4);
+	//parseRouteData(route);
+	//parseRouteData(route2);
+	//parseRouteData(route3);
+
+    //debugger;
+		var y_start =  0;
+         var y_end =   4;
+		 //debugger;
+		 var range = y_end - y_start;
+		 var route_num = routes.length + 1;
+		 var space = range/route_num;
+		 
+		 parseRouteDatas(routes, space);
+		 
+		 options = { 
+			xaxis: { mode: "time" } ,
+			yaxis: { min: y_start ,
+				 max:  y_end,
+				 minTickSize: space,
+				 zoomRange: [1, 1], 
+				 panRange: [0, 4],
+				 ticks: [[space, "route-1"], [2*space, "route-2"], [3*space, "route-3"]]
+		},
+		grid: { hoverable: true, clickable: true, markings: markings },
+		series: {
+			bars: {
+				show: true,
+				lineWidth: 0,
+				align: 'left'
+				
+				//horizontal: true
+			},
+			lines: {
+				show: false
+			}
+		},
+		zoom: {
+            interactive: true
+        },
+        pan: {
+            interactive: true
+        }
+	}
+		 
+		 $.plot($("#placeholder"), route_data, options);
+	
+	$("#placeholder").bind("plothover", function (event, pos, item) {
+			$("#tooltip").remove();
+            if (item) {
+					var pointIndex = item.dataIndex
+                    var content = 'visit Id:' +         
+                    showTooltip(item.pageX, item.pageY,
+                                item.series.tooltip);
+                
+            }
+        
+    });
+	
+	
+	
+	
+	
+	
+	
+	
+    
+});
+
+function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css( {
+            position: 'absolute',
+            display: 'none',
+            top: y + 5,
+            left: x + 5,
+            border: '1px solid #fdd',
+            padding: '2px',
+            'background-color': '#fee',
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    }
+</script>
+
+ </body>
+</html>

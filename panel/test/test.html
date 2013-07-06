@@ -1,0 +1,46 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Panel GUI</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/> 
+
+        <script type="text/javascript" src="locations.js"></script><!--
+        <!---->        <script type="text/javascript">
+            var locations = DepotConfig.locations;
+            var requests = DepotConfig.requests;
+            var Depots = {};
+            debugger;
+            for (var i=0; i<locations.length; i++) {
+                var loc = locations[i];
+                if (loc.id == 'Invalid')
+                    continue;
+                
+                Depots[loc.id] = {};
+                Depots[loc.id].id = loc.id;
+                Depots[loc.id].lonlat = {
+                    lon: loc.lon,
+                    lat: loc.lat
+                }
+    
+                var request = getRequestById(loc.id)
+                if (request)
+                    Depots[loc.id].commodity = request.commodity;
+            }
+            
+            function getRequestById(requestId) {
+                for (var r in requests) {
+                    if (requests[r].id == requestId) {
+                        return requests[r];
+                    }
+                }
+                
+                return null;
+            }
+        </script>
+
+    </head>
+    <body>
+        <div id="mapContainer" style="top:0px; left:0px; right:0px; height:100%; position:absolute; z-Index:1;">hellog</div>
+    </body>
+</html>

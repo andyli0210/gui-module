@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Checker Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="CTS-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript" src="testData/testVolumeVehs.js"></script>
+        <script type="text/javascript" src="testData/testTimeVehs.js"></script>
+        <script type="text/javascript" src="testData/testRouteVehs.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    //geoParaPanel();
+                    //initSlider();
+                    initVolumeCheck();
+                    //initTimeCheck();
+                    //initRouteCheck()
+                })
+            });
+            
+            function initTimeCheck() {
+                timeChecker = new IFL.CTS.TimeCheckerChart();
+                timeChecker.getContainer().appendTo($('#mainContainer'));
+                    
+                timeChecker.setRoutes(testTimeVehs);
+            }
+            
+            function initRouteCheck() {
+                   routeCheckerTable = new IFL.CTS.RouteCheckerTable({width: 800}); 
+                   routeCheckerTable.getContainer().appendTo($('#mainContainer'));
+                   
+                   routeCheckerTable.setRoutes(testRouteVehs);
+                
+                   //routeCheckerItem = new IFL.CTS.RouteCheckerItem(testRouteVehs['V001'],{width: 800});
+                   //routeCheckerItem.getContainer().appendTo($('#mainContainer'));
+                
+//                routeChecker = new IFL.CTS.RouteCheckerChart();
+//                routeChecker.getContainer().appendTo($('#mainContainer'));
+//                
+//                routeChecker.setDepot(testRouteVehs['V001'].depot);
+//                routeChecker.setDayTasks(testRouteVehs['V001'].dayVisits['Mon'].tasks);
+            }
+            
+            function initVolumeCheck() {
+                volumeChecker = new IFL.CTS.VolumeCheckerChart();
+                volumeChecker.getContainer().appendTo($('#mainContainer'));
+                debugger;    
+                volumeChecker.setRoutes(testVolumeVehs.routes);
+            }
+            
+            function initSlider() {
+                slider = new IFL.CTS.ParaSlider({
+                    min: 2,
+                    max: 48,
+                    unitSuffix: ' hours',
+                    unitPre: '$',
+                    defaultValue: 24,
+                    titleText: 'Geo run length in hours: '
+                });
+                slider.getContainer().appendTo($('#mainContainer'));
+            }
+            
+            function geoParaPanel() {
+                geoPara = new IFL.CTS.GeoParaPanel();
+                geoPara.getContainer().appendTo($('#mainContainer'));
+            }
+        </script>
+    </head>
+    <body>
+        <div id="mainContainer" style="width: 600px;">
+        </div>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title></title>
+        <!--                <link type="text/css" href="../core/css/cupertino/jquery-ui-1.8.18.custom.css" rel="stylesheet"/>-->
+        <!--                <link type="text/css" href="../core/css/le-frog/jquery-ui-1.8.6.custom.css" rel="stylesheet"/>-->
+        <!--         <link type="text/css" href="../core/css/smoothness/jquery-ui-1.8.18.custom.css" rel="stylesheet"/>-->
+        <link type="text/css" href="../core/css/overcast/jquery-ui.css" rel="stylesheet"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="../core/layout/Layout-config.js"></script>
+        <script type="text/javascript" src="dc-config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript">
+            var tabWiget;
+            IFL.ready(function() {
+                $(function() {
+                    //debugger;
+                    new AppStarter();
+                    var layoutService = new IFL.Layout.LayoutService();
+                    layoutService.layout($('body'), {
+                        north: {
+                            size: 88,
+                            spacing_open: 0
+                        }
+                    });
+                    
+                    var headBanner = $('<img src="'+ Config.imagePath + '/header.png' +  '"></img>');
+                    $('.ui-layout-north').append(headBanner);
+                })
+            });
+        </script>
+    </head>
+    <body>
+        <div class="ui-layout-north"></div>
+<!--        <div >-->
+<!--            <div id="mainContainer" class="ui-layout-center"></div>-->
+<!--            <div id="mainContainer" class="ui-layout-center" style="left: 0px; right: 0px; top: 5px; bottom: 5px; position: absolute;"></div>-->
+<!--       </div>-->
+    </body>
+</html>

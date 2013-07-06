@@ -1,0 +1,32 @@
+.toggleoff  {
+    background: #FFFFFF;
+    cursor: pointer;
+    border-top: thin solid #72b42d;
+    border-left: thin solid #72b42d;
+    border-bottom: thin solid #070707;
+    border-right: thin solid #070707;
+}
+
+.toggleon {
+    background: #00af00;
+    cursor: pointer;
+    border-top: thin solid #070707;
+    border-left: thin solid #070707;
+    border-bottom: thin solid #72ff2d;
+    border-right: thin solid #72ff2d;
+}
+
+.olControlScale div {
+    float:right;
+    right: 0px;
+    height: 30px;
+    width: 200px;
+}
+
+.olControlCopyright div {
+    float:right;
+    right: 0px;
+    height: 30px;
+    width: 200px;
+}
+.ui-accordion .ui-accordion-content{ overflow:hidden !important; }

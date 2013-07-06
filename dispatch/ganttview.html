@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>Chart View</title>
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="../core/layout/Layout-config.js"></script>
+        <script type="text/javascript" src="../config/Config-config.js"></script>
+        <script type="text/javascript" src="../core/login/Login-config.js"></script>
+        <script type="text/javascript" src="../schedule/Schedule-Config.js"></script>
+        <script type="text/javascript" src="Dispatch-config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+
+        <script type="text/javascript">
+            var readyHandler;
+            
+            IFL.ready(function() {
+                $(function() {
+                    var mapContainer = $('<div id="mapContainer" style="height: 600px; width: 100%"/>').appendTo('body');
+                    mapService = new IFL.MapService.EMS('mapContainer');
+                    
+                    if (readyHandler) {
+                        readyHandler();
+                    }
+                        
+                })
+            });
+        </script>
+    </head>
+    <body>
+        Chart View
+    </body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Route Geo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="RouteGeo-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                    var routeGeoService = new IFL.RouteGeo.RouteGeoService();
+                })
+            });
+        </script>
+    </head>
+    <body>
+        <div id="grid01" style="bottom: 0px; height: 250px; left: 0px; right: 310px; position: absolute;">
+            <table id="list"><tr><td/></tr></table> 
+            <div id="pager"></div> 
+        </div>
+        <div>
+            <div id="sidePanel" style="right: 5px; width: 300px; bottom: 5px; top: 5px; position: absolute; overflow: auto;">
+            </div>
+            <div id="mapContainer" style="left:0; right: 310px; top: 0; bottom: 250px; position: absolute;"></div>
+        </div>
+    </body>
+</html>

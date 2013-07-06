@@ -1,0 +1,37 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Socket IO Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../core/lib/jquery/jquery-1.7.1.min.js" charset="utf-8"></script>
+        <script type="text/javascript">
+            $(function() {
+                $('#send').click(function() {
+                    send();
+                })
+            })
+            
+            function send() {
+                $.ajax({
+                    url: '/gui-module/update/mapview',
+                    type:'POST',
+                    data: $('#meg').val(),
+                    success: function() {
+                        $('#meg').val('');
+                    }
+                })
+            }
+            
+        </script>
+    </head>
+    <body>
+        <a href="/gui-module/j_spring_security_logout">Log out</a>
+        <div>Request Message: </div>
+        <textarea id="meg" rows="5" cols="20"></textarea>
+        <input id="send" type="button" value="Send msg"/>
+    </body>
+</html>
