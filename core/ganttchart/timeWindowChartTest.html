@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title></title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../../LAB.js"></script> 
+        <script type="text/javascript" src="../../IFL.js"></script>
+        <script type="text/javascript" src="../../IFL-Config.js"></script>
+        <script type="text/javascript" src="../../core/Core-Config.js"></script>
+        <script type="text/javascript" src="TimeWindowChartReportService.js"></script>
+         <script type="text/javascript" src="test-data/routeJson.js"></script>
+
+        <script type="text/javascript">
+            IFL.ready(function() {
+                $(function() {
+                   var chartService = new IFL.GanttChart.TimeWindowChartReportService({containerId: 'chartContainer'});
+                   var route = routeJson.routes.route[0];
+                   
+                   chartService.displayRoute(route);
+                });
+            });
+        </script>
+    </head>
+    <body>
+<!--        <div id="container" style="height: 600px; width: 800px; font-size: 11px; position: absolute;">
+            <div id="chartContainer" style="width: 90%;height: 80%;"></div> 
+                        <input type="button" value="show in dialog" id="button" style="margin-top: 10px"/>
+                        <input type="button" value="add route" id="addbutton" style="margin-top: 10px"/>
+        </div>
+                <div id="chartContainer" style="top: 5px; left: 5px; width: 800px; height: 600px"></div>-->
+
+        <div id="chartContainer" style="left: 5px; right: 305px; top: 5px; bottom: 5px; position: absolute;"></div> 
+        <div id="controlPanel" style="right: 5px; width: 300px; top: 5px; bottom: 5px; position: absolute; padding-left: 5px;"></div>
+    </body>
+</html>

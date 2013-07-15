@@ -1,4 +1,4 @@
-var rotueJson = {
+var routeJson = {
 	"payloads": null,
 	"routes": {
 		"route": [{

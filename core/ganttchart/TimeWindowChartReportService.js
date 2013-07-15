@@ -74,10 +74,10 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
                 minTickSize: options.minTickSize,
                 labelWidth: options.labelWidth,
                 show: options.showYaxix,
-                zoomRange: false,
+                zoomRange: true,
                 min: 0,
                 max: 0,
-                panRange: false,
+                panRange: true,
                 ticks: ticks
             },
             grid: {
@@ -111,15 +111,41 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
 
         var request = services[0].refRequest;
         var timeWindow = request.windows.window[0];
-        var timeWindowStart = timeWindow.timetimeStart;
+        var timeWindowStart = timeWindow.timeStart;
         var timeWindowEnd = timeWindow.timeFinish;
+
+        var softTimeWindowStart = timeWindowStart;
+        var softTimeWindowEnd = timeWindowEnd;
+
+
+
+        if (request.constraints) {
+            var constraints = request.constraints.constraint;
+            for (var i in constraints) {
+                var constraint = constraints[i];
+
+                if (constraint.name === 'max-tardiness' || constraint.name === 'max-earliness') {
+                    var definition = constraint.definition;
+                    var duration = parseInt($(definition).find('duration').text());
+
+                    if (constraint.name === 'max-tardiness') {
+                        softTimeWindowEnd += duration * 60 * 1000;
+                    } else {
+                        softTimeWindowStart -= duration * 60 * 1000;
+                    }
+                }
+            }
+        }
+
 
         return {
             earliestArriveTime: earliestArriveTime,
             leaveTime: leaveTime,
             latestStartTime: latestStartTime,
             timeWindowStart: timeWindowStart,
-            timeWindowEnd: timeWindowEnd
+            timeWindowEnd: timeWindowEnd,
+            softTimeWindowStart: softTimeWindowStart,
+            softTimeWindowEnd: softTimeWindowEnd
         }
     }
 
@@ -136,28 +162,99 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
             leaveTime: leaveTime,
             latestStartTime: latestStartTime,
             timeWindowStart: timeWindowStart,
-            timeWindowEnd: timeWindowEnd
-        }
-    }
-    
-    function addRoute(route) {
-        var visits = route.visits.visit;
-        
-        for (var i=0; i<visits.length; i++) {
-            var visit = visits[i];
-            
-        }
+            timeWindowEnd: timeWindowEnd,
+            softTimeWindowEnd: timeWindowEnd,
+            softTimeWindowStart: timeWindowStart
+        };
     }
 
+    function displayRoute(route) {
+        //debugger;
+        var visits = route.visits.visit;
+
+        var preVisitItem;
+        for (var i = 0; i < visits.length; i++) {
+            var visit = visits[i];
+            var visitItem;
+
+            if (i > 0 && i < visits.length - 1) {
+                visitItem = getVisitItem(visit);
+            } else {
+                var routeAvailability = route.vehicles.vehicle.refAvailability;
+                visitItem = getDepotVisitItem(visit, routeAvailability);
+            }
+            //debugger;
+
+            var index = visits.length - i;
+            var visitIds = visit.id.split("_");
+            visitItem.id = visitIds[1];
+            addVisitItemMarker(visitItem, index);
+
+            var chartRow = {
+                rowIndex: index,
+                rowTitle: visitItem.id
+            };
+            addChartRow(chartRow);
+            
+            if (preVisitItem) {
+                addTravelLine(preVisitItem, visitItem, index-1);
+            }
+            
+            preVisitItem = visitItem;
+
+            console.info(i + ', ' + visitItem.id);
+        }
+        //debugger;
+        refreshPlot();
+    }
+    
+    function addTravelLine(startVisit, endVisit, startIndex) {
+        var earlyStartTime = startVisit.leaveTime + options.UTC_offset;
+        var earlyEndTime = endVisit.earliestArriveTime + options.UTC_offset;
+        var endIndex = startIndex + 1;
+        
+        var style = {};
+        $.extend(true, style, options.itemStyle);
+        //create item marking
+        var marking = new IFL.GanttChart.Marking(earlyStartTime, earlyEndTime, startIndex, endIndex, style.borderColor, style.fillColor, style.highlightColor, 'line');
+        var travelItem = {};
+        travelItem.marking = marking;
+
+        chartItems.push(travelItem);
+        ganttData.push({
+            data: [[earlyStartTime, startIndex], [earlyEndTime, endIndex]]
+        });
+        
+    }
+
+
     function addVisitItemMarker(visitItem, rowIndex) {
+        //add soft time window bar
+        var softTimeWindowItem = {
+            id: visitItem.id,
+            start: visitItem.softTimeWindowStart,
+            end: visitItem.softTimeWindowEnd,
+            rowIndex: rowIndex,
+            //height: 0.1,
+            style: {
+                fillColor: '#FF9933',
+                borderColor: ''
+            }
+        };
+        addItem(softTimeWindowItem);
+
+        //add hard time window bar
         var timeTimeWindowItem = {
+            id: visitItem.id,
             start: visitItem.timeWindowStart,
             end: visitItem.timeWindowEnd,
             rowIndex: rowIndex
-        }
+        };
         addItem(timeTimeWindowItem);
 
+        //add service duration bar
         var serviceItem = {
+            id: visitItem.id,
             start: visitItem.earliestArriveTime,
             end: visitItem.leaveTime,
             rowIndex: rowIndex,
@@ -165,7 +262,7 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
             style: {
                 fillColor: '#00FF00'
             }
-        }
+        };
         addItem(serviceItem);
     }
 
@@ -175,7 +272,8 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
         var rowIndex = chartItem.rowIndex;
 
         if (start != 0 && !start) {
-            console.error('Chart Item must have start');
+            //debugger;
+            console.error('Chart Item must have start: ' + chartItem.id);
             return;
         }
 
@@ -463,7 +561,8 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
         drawChartItems: drawChartItems,
         drawLine: drawLine,
         getGanttOptions: getGanttOptions,
-        getCurrentOverItem: getCurrentOverItem
+        getCurrentOverItem: getCurrentOverItem,
+        displayRoute: displayRoute
     }
 
 
