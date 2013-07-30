@@ -12,7 +12,7 @@ IFL.CTS.CTSOptPanel = function(_options) {
     var runGroButton;
     var runDynButton;
 
-    var eventHandler = new IFL.Util.EventHandler(['runCts', 'runGro', 'runDyn', 'runDynId', 'report','showMap']);
+    var eventHandler = new IFL.Util.EventHandler(['runCts', 'runGro', 'runDyn', 'runDynId', 'report', 'showMap','showRobust']);
 
     init();
     function init() {
@@ -31,7 +31,7 @@ IFL.CTS.CTSOptPanel = function(_options) {
         runOptButton.click(function() {
             eventHandler.notifyHandlers('runCts');
         });
-        
+
         //hide directly run cts button when user jump to last page directly
         if (Config.skipChecker) {
             runOptButton.hide();
@@ -370,47 +370,104 @@ IFL.CTS.CTSOptPanel = function(_options) {
             if (Config.stopZoom) {
                 mapPara += '&stopZoom=' + Config.stopZoom;
             }
-            
+
             showMapFilterPopup(optInfo, mapPara);
+        });
+        
+        optInfoTable.registerHandler('showRobust', function(optInfo) {
+            var mapPara = 'optId=' + optInfo.id;
+            showRobustReportFilterPopup(optInfo, mapPara);
         });
     }
     
-    function showMapFilterPopup(optInfo, mapPara) {
-        var mapFilterPanel = new IFL.CTS.RouteFilterPanel();
-        
-        mapFilterPanel.getContainer().dialog({
-            modal: true,
-            title: 'Route Filter',
-            autoOpen: true,
-            height: 500,
-            width: 450,
-            buttons: [{
-                    text: 'OK',
-                    click: function() {
-                        var filterContents = mapFilterPanel.getRouteFilterParameters();
-                        mapPara += '&routeIds=' + filterContents.routeIds;
-                        mapPara += '&routeDays=' + filterContents.routeDays;
-                        mapPara += '&showDirection=' + filterContents.showDirection;
-                        mapPara += '&showVehicle=' + filterContents.showVehicle;
-                        mapPara += '&showDeliverySeq=' + filterContents.showDeliverySeq;
-                        mapPara += '&scaleByGpad=' + filterContents.scaleByGpad;
-                        $(this).dialog("close");
-                        eventHandler.notifyHandlers("showMap", optInfo, mapPara);
+    function showRobustReportFilterPopup(optInfo, mapPara) {
+
+        options.ctsService.getSolutionRouteIds(optInfo.id, function(routeIds) {
+            var robustReportFilterPanel = new IFL.CTS.RouteFilterPanel({
+                routeIds: routeIds,
+                isMultipleSelect: false,
+                defaultStyleItems: ['Show Delivery Sequence'],
+            });
+
+            robustReportFilterPanel.getContainer().dialog({
+                modal: true,
+                title: 'Route Filter',
+                autoOpen: true,
+                height: 600,
+                width: 450,
+                buttons: [{
+                        text: 'OK',
+                        click: function() {
+                            var filterContents = robustReportFilterPanel.getRouteFilterParameters();
+                            mapPara += '&routeIds=' + filterContents.routeIds;
+                            mapPara += '&routeDays=' + filterContents.routeDays;
+                            mapPara += '&showDirection=' + filterContents.showDirection;
+                            mapPara += '&showVehicle=' + filterContents.showVehicle;
+                            mapPara += '&showDeliverySeq=' + filterContents.showDeliverySeq;
+                            mapPara += '&scaleByGpad=' + filterContents.scaleByGpad;
+                            $(this).dialog("close");
+                            eventHandler.notifyHandlers("showRobust", optInfo, mapPara);
+                        }
+                    },
+                    {
+                        text: 'Cancel',
+                        click: function() {
+                            $(this).dialog("close");
+                        }
                     }
-                },
-                {
-                    text: 'Cancel',
-                    click: function() {
-                        $(this).dialog("close");
-                    }
+                ],
+                close: function() {
+                    robustReportFilterPanel.getContainer().dialog('destroy');
+                    robustReportFilterPanel.getContainer().remove();
+                    robustReportFilterPanel = null;
                 }
-            ],
-            close: function() {
-                mapFilterPanel.getContainer().dialog('destroy');
-                mapFilterPanel.getContainer().remove();
-                mapFilterPanel = null;
-            }
+            });
         });
+
+    }
+
+    function showMapFilterPopup(optInfo, mapPara) {
+
+        options.ctsService.getSolutionRouteIds(optInfo.id, function(routeIds) {
+            var mapFilterPanel = new IFL.CTS.RouteFilterPanel({
+                routeIds: routeIds
+            });
+
+            mapFilterPanel.getContainer().dialog({
+                modal: true,
+                title: 'Route Filter',
+                autoOpen: true,
+                height: 600,
+                width: 450,
+                buttons: [{
+                        text: 'OK',
+                        click: function() {
+                            var filterContents = mapFilterPanel.getRouteFilterParameters();
+                            mapPara += '&routeIds=' + filterContents.routeIds;
+                            mapPara += '&routeDays=' + filterContents.routeDays;
+                            mapPara += '&showDirection=' + filterContents.showDirection;
+                            mapPara += '&showVehicle=' + filterContents.showVehicle;
+                            mapPara += '&showDeliverySeq=' + filterContents.showDeliverySeq;
+                            mapPara += '&scaleByGpad=' + filterContents.scaleByGpad;
+                            $(this).dialog("close");
+                            eventHandler.notifyHandlers("showMap", optInfo, mapPara);
+                        }
+                    },
+                    {
+                        text: 'Cancel',
+                        click: function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                ],
+                close: function() {
+                    mapFilterPanel.getContainer().dialog('destroy');
+                    mapFilterPanel.getContainer().remove();
+                    mapFilterPanel = null;
+                }
+            });
+        });
+
     }
 
     function registerHandler(name, handler) {

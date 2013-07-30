@@ -12,12 +12,12 @@
         <script type="text/javascript" src="../route-geo/RouteGeo-Config.js"></script>
         <script type="text/javascript" src="CTS-Config.js"></script>
         <script type="text/javascript" src="../IFL-Config.js"></script>
+        <!--<script type="text/javascript" src="testData/routeJson.js"></script>-->
 
         <script type="text/javascript">
             IFL.ready(function() {
                 $(function() {
                     console.info('opt id: ' + Config.optId);
-                    //$('#mapContainer').hide();
                     getCtsOptSolution(Config.optId, function(solution) {
                         getCtsOptInfo(Config.optId, function(optInfo) {
                             window.document.title = 'Map View for ' + optInfo.name;
@@ -36,9 +36,7 @@
                             drawOptions.showVehAnimation = Config.showVehicle;
                             drawOptions.showDeliverySeq = Config.showDeliverySeq;
                             drawOptions.scaleByGpad = Config.scaleByGpad;
-
                             mapservice.displayOptSolution(solution, optInfo, drawOptions);
-                            //$('#mapContainer').show();
                         })
 
                     })
@@ -47,10 +45,14 @@
 
             function getCtsOptSolution(optId, callback) {
                 var url = Config.ctsServerUrl + "/opt/solution/" + optId;
-                if (!Config.routeDays && !Config.routeIds) {
+                if (!Config.routeDays) {
                     url += '?routeDays=summary';
                 } else {
-                    url += '?routeDays=' + Config.routeDays + '&routeIds=' + Config.routeIds;
+                    url += '?routeDays=' + Config.routeDays;
+                }
+
+                if (Config.routeIds) {
+                    url += '&routeIds=' + Config.routeIds;
                 }
 
                 console.info('trying to get CTS Opt Solution at: ' + url);

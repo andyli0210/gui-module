@@ -100,7 +100,7 @@ IFL.MapService.Google = function(mapContainerId) {
                 var vehLineSymbol = {
                     path: google.maps.SymbolPath.CIRCLE,
                     scale: 8,
-                    strokeColor: '#393'
+                    strokeColor: '#0000FF'//'#393'
                 };
 
                 normalPolylineOptions.icons.push({
@@ -569,6 +569,11 @@ IFL.MapService.Google = function(mapContainerId) {
             handler();
         });
     }
+    
+    function panTo(latlon) {
+        var mapLonlat = getMapLonLat(latlon.lon, latlon.lat);
+        map.panTo(mapLonlat);
+    }
 
     return {
         mapType: 'Google',
@@ -604,6 +609,7 @@ IFL.MapService.Google = function(mapContainerId) {
         clearPolylineLayer: clearPolylineLayer,
         registerHandler: registerHandler,
         addIdleHandler: addIdleHandler,
-        addPointMarker: addPointMarker
+        addPointMarker: addPointMarker,
+        panTo: panTo
     }
 }

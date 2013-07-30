@@ -2,9 +2,9 @@ var ctsPath = IFL.searchForScriptLocation('CTS-Config');
 console.info('CTS Module path: ' + ctsPath);
 
 Config.ctsPath = ctsPath;
-Config.ctsScripts = ['widgets/VolumeCheckerChart', 'widgets/TimeCheckerChart', 'widgets/RouteCheckerChart','widgets/RouteCheckerItem', 'widgets/RouteCheckerTable', 'widgets/ParaSlider', 'widgets/StatusTable','widgets/DataCheckList','widgets/LoadingDiv','widgets/CustomerInclusionWidget','widgets/CustomerArriveTimeWidget','widgets/CustomerDeliveryFeeWidget','widgets/CustomerUnitPriceWidget','widgets/DataSummaryTable', 'widgets/SolverParameterPanel','widgets/ScheduleDetailPanel','widgets/DynamicOptPanel','widgets/DynamicOptIdPanel',
+Config.ctsScripts = ['widgets/VolumeCheckerChart', 'widgets/TimeCheckerChart', 'widgets/RouteCheckerChart','widgets/RouteCheckerItem', 'widgets/RouteCheckerTable', 'widgets/ParaSlider', 'widgets/StatusTable','widgets/DataCheckList','widgets/LoadingDiv','widgets/CustomerInclusionWidget','widgets/CustomerArriveTimeWidget','widgets/CustomerDeliveryFeeWidget','widgets/CustomerUnitPriceWidget','widgets/DataSummaryTable', 'widgets/SolverParameterPanel','widgets/ScheduleDetailPanel','widgets/DynamicOptPanel','widgets/DynamicOptIdPanel','widgets/RouteFilterWidget',
     'widgets/SolverParaTable', 'widgets/AccountManageWidget','widgets/ExcelExportWidget','widgets/DataQualityList','layout/LayoutManager', 'pagePanels/GeoParaPanel', 'pagePanels/GeoCheckerPanel', 'pagePanels/VolumeParaPanel', 'pagePanels/VolumeCheckerPanel', 'pagePanels/TimeParaPanel', 'pagePanels/TimeCheckerPanel', 'pagePanels/CustomerParaTabs','widgets/GanttChartTable','widgets/UnscheduleListChartTable','widgets/OptInfoTable','widgets/OptInfoWidget','widgets/CustomerListTable','widgets/ReportContentPanel','widgets/RouteFilterPanel',
-    'pagePanels/RouteParaPanel', 'pagePanels/RouteCheckerPanel','pagePanels/DataStatusContainer','pagePanels/BaseCasePanel','pagePanels/CTSOptPanel','CTSService', 'CTSMapService'];
+    'pagePanels/RouteParaPanel', 'pagePanels/RouteCheckerPanel','pagePanels/DataStatusContainer','pagePanels/BaseCasePanel','pagePanels/CTSOptPanel','CTSService', 'CTSMapService','RobustReportService'];
 
 IFL.CTS = new IFL.Module(Config.ctsPath, Config.ctsScripts);
 IFL.Modules.push(IFL.CTS);

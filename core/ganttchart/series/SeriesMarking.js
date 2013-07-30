@@ -71,7 +71,7 @@ IFL.GanttChart.Marking = function(_xFrom, _xTo, _yFrom, _yTo, _borderColor, _fil
         drawMarking(context, xrange, yrange, plotOffset, borderColor, fillColor);
     }
 
-    function highlight(context, xaxis, yaxis, plotOffset, isHighlight, linewidth, _fillColor) {
+    function highlight(context, xaxis, yaxis, plotOffset, isHighlight, linewidth, _fillColor, _borderColor) {
         var ranges = extractRanges(xaxis, yaxis);
 
         if (!ranges)
@@ -81,9 +81,10 @@ IFL.GanttChart.Marking = function(_xFrom, _xTo, _yFrom, _yTo, _borderColor, _fil
         var yrange = ranges.yrange;
 
         //debugger;
-        var realFillColor = _fillColor || highlightColor || fillColor;
+        var realFillColor = _fillColor || highlightColor;// || fillColor;
+        var realBordColor = _borderColor || borderColor;
         if (isHighlight)
-            drawMarking(context, xrange, yrange, plotOffset, borderColor, realFillColor, linewidth || 3);
+            drawMarking(context, xrange, yrange, plotOffset, realBordColor, realFillColor, linewidth || 3);
         else
             clearMarking(context, xrange, yrange, plotOffset);
 
@@ -95,6 +96,7 @@ IFL.GanttChart.Marking = function(_xFrom, _xTo, _yFrom, _yTo, _borderColor, _fil
         context.lineWidth = lineWidth || 1;
 
         if (markingType && markingType == 'line') {
+            context.lineWidth = 3;
             context.moveTo(xrange.from + plotOffset.left, yrange.from + plotOffset.top);
             context.lineTo(xrange.to + plotOffset.left, yrange.to + plotOffset.top);
             context.strokeStyle = borderColor;

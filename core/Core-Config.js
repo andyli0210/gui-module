@@ -31,7 +31,7 @@ var coreConfig = {
     treeviewScripts: ['jquery.treeview'],
     jgridScripts: ['jquery.jqGrid.min','grid.locale-en'],
     widgetsScripts: ['SidePanel', 'RadioGroup', 'CheckboxGroup', 'FolderWidget', 'ButtonPanel', 'ListWidget','ListControlPanel', 'DomainTable', 'DomainPopup','DropdownList','Pager','DomainListTable', 'GanttChartTable','DomainListEditor','DynamicListTable','Tabs','DateFilter','LoadingPopup','FileUploadPanel','TreeWidget','VerticalSlidePanel'],
-    ganttchartScripts: ['flot/jquery.flot', 'flot/jquery.flot.navigate', 'flot/jquery.flot.resize','series/ChartItem', 'series/ChartRow','series/SeriesMarking','GanttChartService'],
+    ganttchartScripts: ['flot/jquery.flot', 'flot/jquery.flot.navigate', 'flot/jquery.flot.resize','series/ChartItem', 'series/ChartRow','series/SeriesMarking','GanttChartService','TimeWindowChartReportService'],
     googleMapsScripts: ['Label', 'infobubble'],
     emsScripts: ["EMS","EMSUtils",
     "Ajax",

@@ -10,6 +10,8 @@ IFL.CTS.MapService = function(_options) {
     var custPopup;
     var depotPopup;
     var routePopup;
+    
+    var custMarkers = [];
 
     init();
     function init() {
@@ -27,7 +29,7 @@ IFL.CTS.MapService = function(_options) {
         mapservice.setRouteService(routeservice);
 
         mapservice.registerHandler('clickDemandPoint', function(request, opts) {
-            if (request.id) {
+            if (!request.cusNum) {
                 console.info('Request ID: ' + request.id);
                 showRequestPopup(request, {
                     x: opts.pageX,
@@ -103,6 +105,7 @@ IFL.CTS.MapService = function(_options) {
                     route.wayPoints.push(visitLoc);
                     var depotDomain = optInfo.dataValueList;
                     depotDomain.depot = depotId;
+                    depotDomain.id = depotId;
                     var depotColor = '#' + Config.depotColor || 'FFFF00';
                     renderLocationMarker(visitLoc, depotColor, 15, 'Depot', '#000000', depotDomain);
                 }
@@ -236,22 +239,24 @@ IFL.CTS.MapService = function(_options) {
         }
 
 
+        drawPaths(lcpRoutes, drawOptions);
+        
         //at last display path polylines, since it may take long.
         //draw paths after the map is idle, so user could see location markers first
-        var idleHandler = function(lcpRoutes) {
-            return function() {
-                drawPaths(lcpRoutes);
-            }
-        }
-        
-//        mapservice.addIdleHandler(function() {
-//            console.info('Map Idle !!!');
-//        })
-
-        setTimeout(function() {
-            drawPaths(lcpRoutes, drawOptions);
-            //mapservice.addIdleHandler();
-        }, 1000 * (lcpRoutes.length / 5));
+//        var idleHandler = function(lcpRoutes) {
+//            return function() {
+//                drawPaths(lcpRoutes);
+//            }
+//        }
+//        
+////        mapservice.addIdleHandler(function() {
+////            console.info('Map Idle !!!');
+////        })
+//
+//        setTimeout(function() {
+//            drawPaths(lcpRoutes, drawOptions);
+//            //mapservice.addIdleHandler();
+//        }, 1000 * (lcpRoutes.length / 5));
         
     }
 
@@ -279,7 +284,7 @@ IFL.CTS.MapService = function(_options) {
         for (var r in lcpRoutes) {
             var lcpRoute = lcpRoutes[r];
             //render route polyline
-            routeservice.getShortestPathByHandler(lcpRoute.wayPoints, drawHandler(lcpRoute.routeColor, lcpRoute.routeDomain), true);
+            routeservice.getShortestPathByHandler(lcpRoute.wayPoints, drawHandler(lcpRoute.routeColor, lcpRoute.routeDomain), false);
         }
     }
 
@@ -334,13 +339,45 @@ IFL.CTS.MapService = function(_options) {
         }
 
         //label = gpadValue;
-        var size = scaleByGpad ? Math.abs(gpadValue) / gpadScale : 3;
+        var size = scaleByGpad ? Math.abs(gpadValue) / gpadScale : 5;
 
         renderLocationMarker(requestLoc, color, size, label, routeColor, request);
     }
 
     function renderLocationMarker(lonlat, color, size, label, borderColor, request) {
-        return mapservice.addDemandPoint(lonlat, color, size, label, borderColor, false, request, request);
+        var marker = mapservice.addDemandPoint(lonlat, color, size, label, borderColor, false, request, request);
+        marker.id = request.id;
+        custMarkers.push(marker);
+        return marker;
+    }
+    
+    function hightlightLocationMarker(custId, isHighlight) {
+        for (var m in custMarkers) {
+            var marker = custMarkers[m];
+            
+            if (marker.id.indexOf(custId) !== -1) {
+                var point = marker.getIcon();
+                if (isHighlight) {
+                    point.oriColor = point.fillColor;
+                    point.fillColor = '#FFFF99';
+                    marker.setIcon(point);
+                } else {
+                    point.fillColor = point.oriColor;
+                    marker.setIcon(point);
+                }
+            }
+        }
+    }
+    
+    function panToLocationMarker(custId) {
+        for (var m in custMarkers) {
+            var marker = custMarkers[m];
+            
+            if (marker.id.indexOf(custId) !== -1) {
+                var latlon = mapservice.getMarkerLatlon(marker);
+                mapservice.panTo(latlon);
+            }
+        }
     }
 
     function showRoutePopup(routeDomain, pagePos) {
@@ -457,8 +494,11 @@ IFL.CTS.MapService = function(_options) {
         
         var timeWindow = request.windows.window[0];
         var elapsedService = request.elapsedService;
-        var timeStart = formatDate(new Date(timeWindow.timeStart), 'yyyy-MM-dd HH:mm:ss');
-        var timeEnd = formatDate(new Date(timeWindow.timeFinish), 'yyyy-MM-dd HH:mm:ss');
+        //var timeStart = formatDate(new Date(timeWindow.timeStart), 'yyyy-MM-dd HH:mm:ss');
+        //var timeEnd = formatDate(new Date(timeWindow.timeFinish), 'yyyy-MM-dd HH:mm:ss');
+        
+        var timeStart = formatDate(new Date(timeWindow.timeStart), 'HH:mm:ss');
+        var timeEnd = formatDate(new Date(timeWindow.timeFinish), 'HH:mm:ss');
 
         var domain = {
             id: requestIds[requestIds.length - 1],
@@ -511,7 +551,9 @@ IFL.CTS.MapService = function(_options) {
     }
 
     return {
-        displayOptSolution: displayOptSolution
+        displayOptSolution: displayOptSolution,
+        hightlightLocationMarker: hightlightLocationMarker,
+        panToLocationMarker: panToLocationMarker
     }
 
 }

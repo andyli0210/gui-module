@@ -14,10 +14,11 @@ IFL.CTS.OptInfoWidget = function(optInfo, _options) {
     var cancelButton;
     var asInputButton;
     var reportButton;
+    var robustButton;
     
     var buttonPanel;
     
-    var eventHandler = new IFL.Util.EventHandler(['mouseover', 'mouseout', 'click', 'showMap', 'showChart','showParameters','rerun','delete','cancel','asInput','report']);
+    var eventHandler = new IFL.Util.EventHandler(['mouseover', 'mouseout', 'click', 'showMap', 'showChart','showParameters','rerun','delete','cancel','asInput','report','showRobust']);
     init();
     
     function initDefaultOptions() {
@@ -106,6 +107,13 @@ IFL.CTS.OptInfoWidget = function(optInfo, _options) {
         });
         reportButton.attr('title', 'Generate report for this schedule solution');
         reportButton.appendTo(buttonPanel);
+        
+        robustButton = $('<button>Robustness</button>').button();
+        robustButton.click(function() {
+            eventHandler.notifyHandlers('showRobust', optInfo);
+        });
+        robustButton.attr('title', 'Display Robustness Report for this schedule solution');
+        robustButton.appendTo(buttonPanel);
         
         // only base case and rop has rerun button
         if (optInfo.id == 'checkers-data' || optInfo.id == 'rop-data') {

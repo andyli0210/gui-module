@@ -487,7 +487,8 @@ function AppStarter() {
     
     function initCtsOptPanel(customerGroups) {
         ctsOptPanel = new IFL.CTS.CTSOptPanel({
-            customerGroups: customerGroups
+            customerGroups: customerGroups,
+            ctsService: ctsService
         });
         
         ctsOptPanel.registerHandler('runCts', function() {
@@ -541,6 +542,19 @@ function AppStarter() {
             
             console.info('show map view with parameters: ' + mapPara);
             window.open('mapView.html?' + mapPara, mapViewName, 'fullscreen=yes');
+        });
+        
+        ctsOptPanel.registerHandler('showRobust', function(optInfo, mapPara) {
+            
+            var mapViewName;
+            if (Config.newWindow) {
+                mapViewName = '_blank';
+            } else {
+                mapViewName = 'robustReportView';
+            }
+            
+            console.info('show map view with parameters: ' + mapPara);
+            window.open('robustReportView.html?' + mapPara, mapViewName, 'fullscreen=yes');
         });
         
         ctsOptPanel.registerHandler('showChart', function(optInfo) {

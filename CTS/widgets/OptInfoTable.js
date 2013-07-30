@@ -6,13 +6,13 @@ IFL.CTS.OptInfoTable = function(_options) {
     var container;
     
     var optInfoWidgets;
-    var eventHandler = new IFL.Util.EventHandler(['mouseover', 'mouseout', 'click', 'showMap', 'showChart','showParameters', 'rerun','delete','cancel','asInput','report']);
+    var eventHandler = new IFL.Util.EventHandler(['mouseover', 'mouseout', 'click', 'showMap', 'showChart','showParameters', 'rerun','delete','cancel','asInput','report','showRobust']);
     
     init();
     function initDefaultOptions() {
         options = {
             loadingIconPath: Config.imagePath + "/loading2.gif",
-            width: 1000
+            width: 1200
         }
     }
     
@@ -68,6 +68,10 @@ IFL.CTS.OptInfoTable = function(_options) {
         
         optInfoWidget.registerHandler('report', function(optInfo, options) {
             eventHandler.notifyHandlers('report', optInfo, options);
+        });
+        
+        optInfoWidget.registerHandler('showRobust', function(optInfo, options) {
+            eventHandler.notifyHandlers('showRobust', optInfo, options);
         });
     }
     

@@ -218,7 +218,8 @@ IFL.CTS.GanttChartTable = function(_options) {
                 var day = selectedDays[c];
                 
                 if (!vehDayRoute[day]) {
-                    debugger;
+                    console.error('no day info for vehicle: ' + v + ' at ' + day);
+                    //debugger;
                 }
                 items = items.concat(vehDayRoute[day].chartItems);
             }
@@ -235,8 +236,10 @@ IFL.CTS.GanttChartTable = function(_options) {
         var service = visit.services.service[0];
         var serviceId = service.id;
         var elapsedService = service.elapsedDuration;
-        var timeEarliest = formatDate(new Date(service.timeEarliest), 'yyyy-MM-dd HH:mm:ss');
-        var timeLatest = formatDate(new Date(service.timeLatest), 'yyyy-MM-dd HH:mm:ss');
+        //var timeEarliest = formatDate(new Date(service.timeEarliest), 'yyyy-MM-dd HH:mm:ss');
+        //var timeLatest = formatDate(new Date(service.timeLatest), 'yyyy-MM-dd HH:mm:ss');
+        var timeEarliest = formatDate(new Date(service.timeEarliest), 'HH:mm:ss');
+        var timeLatest = formatDate(new Date(service.timeLatest), 'HH:mm:ss');
         
         var task = service.refRequest;
         var taskId = task.id;

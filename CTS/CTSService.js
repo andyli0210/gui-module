@@ -386,6 +386,7 @@ IFL.CTS.CTSService = function(_options) {
     }
     
     function getCtsOptSolution(optId, callback) {
+        var daysParameters = '?route';
         var url = serverUrl + "/opt/solution/" + optId;
         console.info('trying to get CTS Opt Solution at: ' + url);
         $.ajax({
@@ -562,7 +563,7 @@ IFL.CTS.CTSService = function(_options) {
                 loadingPopup.hide();
                 console.error('Failed to get CTS opt init !!!');
             }
-        })
+        });
     }
     
     function confirmOpt(optId, callback) {
@@ -592,6 +593,24 @@ IFL.CTS.CTSService = function(_options) {
                 IFL.Util.showErrorDialog("Error",'Failed to confirm ' + optId);
                 loadingPopup.hide();
                 console.error('Failed to confirm ' + optId);
+            }
+        });
+    }
+    
+    function getSolutionRouteIds(optId, callback) {
+        console.info('trying to get route ids for ' + optId + '...');
+        
+        $.ajax({
+            url: serverUrl + '/opt/routeIds/' + optId,
+            type: 'GET',
+            dataType: 'json',
+            success: function(routeIds) {
+                console.info('Successfully get solution route ids');
+                callback(routeIds);
+            },
+            error: function() {
+                IFL.Util.showErrorDialog("Error",'Failed to get solution route ids for ' + optId);
+                console.error('Failed to get solution route ids for ' + optId);
             }
         });
     }
@@ -654,6 +673,7 @@ IFL.CTS.CTSService = function(_options) {
         generateGroOpt: generateGroOpt,
         generateDynOpt: generateDynOpt,
         generateDynIdOpt: generateDynIdOpt,
-        exportSolutionReport: exportSolutionReport
-    }
+        exportSolutionReport: exportSolutionReport,
+        getSolutionRouteIds: getSolutionRouteIds
+    };
 }

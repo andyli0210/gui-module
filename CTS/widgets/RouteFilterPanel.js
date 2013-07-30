@@ -1,33 +1,36 @@
 IFL.CTS.RouteFilterPanel = function(_options) {
     var options;
     var container;
-    var routeIdsInput;
-    var routeDaysInput;
+    
+    var routeFilterWidget;
     var mapStyleCheckboxGroup;
     var styleItems = ['Show Route Direction', 'Show Vehicle Movement', 'Show Delivery Sequence', 'Scale By Gpad'];
 
     initOptions();
+    $.extend(true, options, _options);
+    
     init();
     function init() {
         container = $('<div/>');
-
-        var message = $('<h5>Filter Route by ID and Day (leave filters empty will show all Grand Routes)</h5>');
         
-        var routeIdMeg = $('<div>Route IDs (use comma as Separator character)</div>');
-        routeIdsInput = $('<input/>').attr('value', '').css('width', 350);
+        routeFilterWidget = new IFL.CTS.RouteFilterWidget({
+            isMultiple: options.isMultipleSelect,
+            routeIds: options.routeIds
+        });
         
-         var routeDaysMeg = $('<div>Route Days (use comma as Separator character, input "summary" will show grand route)</div>');
-        routeDaysInput = $('<input/>').attr('value', '').css('width', 350);
-        
-        container.append(message).append(routeIdMeg).append(routeIdsInput).append('<br/>').append(routeDaysMeg).append(routeDaysInput);
+        container.append(routeFilterWidget.getContainer());
         
         var mapStyleMeg = $('<h5>Choose Map Styles</h5>').appendTo(container);
-        mapStyleCheckboxGroup = new IFL.Widget.CheckboxGroup('mapStyleCheckboxGroup', styleItems, ['Scale By Gpad'], true, true);
+        mapStyleCheckboxGroup = new IFL.Widget.CheckboxGroup('mapStyleCheckboxGroup', styleItems, options.defaultStyleItems, true, true);
         mapStyleCheckboxGroup.getContainer().appendTo(container);
     }
 
     function initOptions() {
-        options = _options;
+        options = {
+            isMultipleSelect: true,
+            defaultStyleItems: ['Scale By Gpad'],
+            routeIds: []
+        };
     }
 
     function getContainer() {
@@ -36,8 +39,8 @@ IFL.CTS.RouteFilterPanel = function(_options) {
 
     function getRouteFilterParameters() {
         var parameters = {
-            routeIds: routeIdsInput.val(),
-            routeDays: routeDaysInput.val(),
+            routeIds: routeFilterWidget.getSelectedRoutes(),
+            routeDays: routeFilterWidget.getSelectedDays(),
             showDirection: false,
             showVehicle: false,
             showDeliverySeq: false,
