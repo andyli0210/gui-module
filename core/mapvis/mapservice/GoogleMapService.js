@@ -448,12 +448,6 @@ IFL.MapService.Google = function(mapContainerId) {
             //mapLabel.bindTo('text', marker, 'position');
 
             labels.push(mapLabel);
-
-            $(mapLabel.div_).css('cursor', 'pointer');
-            $(mapLabel.span_).click(clickHandler);
-            $(mapLabel.span_).dblclick(function(e) {
-                e.stopPropagation();
-            });
         }
 
         if (isConfigurable || isClickable) {
@@ -510,6 +504,17 @@ IFL.MapService.Google = function(mapContainerId) {
 
             google.maps.event.addListener(marker, 'mouseover', mouseOverHandler);
             google.maps.event.addListener(marker, 'mouseout', mouseOutHandler);
+
+            //let label listen to mouse event as well, otherwise it will block the event to marker
+            if (label || label == 0) {
+                $(mapLabel.div_).css('cursor', 'pointer');
+                $(mapLabel.span_).click(clickHandler);
+                $(mapLabel.span_).dblclick(function(e) {
+                    e.stopPropagation();
+                });
+                $(mapLabel.span_).mouseover(mouseOverHandler);
+                $(mapLabel.span_).mouseout(mouseOutHandler);
+            }
         }
 
         return marker;
@@ -569,7 +574,7 @@ IFL.MapService.Google = function(mapContainerId) {
             handler();
         });
     }
-    
+
     function panTo(latlon) {
         var mapLonlat = getMapLonLat(latlon.lon, latlon.lat);
         map.panTo(mapLonlat);

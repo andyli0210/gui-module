@@ -381,12 +381,14 @@ IFL.CTS.CTSOptPanel = function(_options) {
     }
     
     function showRobustReportFilterPopup(optInfo, mapPara) {
+        
+        var defaultStyleItems = Config.hideDeliverySequence ? ['Scale By Gpad'] : ['Show Delivery Sequence'];
 
         options.ctsService.getSolutionRouteIds(optInfo.id, function(routeIds) {
             var robustReportFilterPanel = new IFL.CTS.RouteFilterPanel({
                 routeIds: routeIds,
                 isMultipleSelect: false,
-                defaultStyleItems: ['Show Delivery Sequence'],
+                defaultStyleItems: defaultStyleItems,
             });
 
             robustReportFilterPanel.getContainer().dialog({

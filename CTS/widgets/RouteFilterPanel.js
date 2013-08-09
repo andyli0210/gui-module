@@ -4,8 +4,13 @@ IFL.CTS.RouteFilterPanel = function(_options) {
     
     var routeFilterWidget;
     var mapStyleCheckboxGroup;
-    var styleItems = ['Show Route Direction', 'Show Vehicle Movement', 'Show Delivery Sequence', 'Scale By Gpad'];
-
+    var styleItems;
+    if (Config.hideDeliverySequence) {
+        styleItems = ['Show Route Direction', 'Show Vehicle Movement', 'Scale By Gpad'];
+    } else {
+        styleItems = ['Show Route Direction', 'Show Vehicle Movement', 'Show Delivery Sequence', 'Scale By Gpad'];
+    }
+    
     initOptions();
     $.extend(true, options, _options);
     
@@ -50,17 +55,11 @@ IFL.CTS.RouteFilterPanel = function(_options) {
         var seletedStyles = mapStyleCheckboxGroup.getSelectedItems();
         for (var i in seletedStyles) {
             var style = seletedStyles[i];
-            if (style === styleItems[0]) {
-                parameters['showDirection'] = true;
-            }
-            if (style === styleItems[1]) {
-                parameters['showVehicle'] = true;
-            }
-            if (style === styleItems[2]) {
-                parameters['showDeliverySeq'] = true;
-            }
-            if (style === styleItems[3]) {
-                parameters['scaleByGpad'] = true;
+            switch (style) {
+                case 'Show Route Direction': parameters['showDirection'] = true; break;
+                case 'Show Vehicle Movement': parameters['showVehicle'] = true; break;
+                case 'Show Delivery Sequence': parameters['showDeliverySeq'] = true; break;
+                case 'Scale By Gpad': parameters['scaleByGpad'] = true; break;
             }
         }
         

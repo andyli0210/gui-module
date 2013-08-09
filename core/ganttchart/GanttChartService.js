@@ -71,7 +71,8 @@ IFL.GanttChart.GanttChartService = function(_options) {
                 mode: "time",
                 position: 'top',
                 labelWidth: options.labelWidth,
-                labelHeight: options.labelHeight
+                labelHeight: options.labelHeight,
+                timeformat: '%H:%M'
             },
             yaxis: {
                 minTickSize: options.minTickSize,

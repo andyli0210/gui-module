@@ -222,8 +222,9 @@ function AppStarter() {
         //initAccountDetails();
         });
         
-        fileUploadPanel.registerHandler('failed', function() {
+        fileUploadPanel.registerHandler('failed', function(fileName, errorOptions) {
             fileUploadPanel.showLoading(false);
+            IFL.Util.showErrorDialog('Failed to parse excel file input', errorOptions.xhr.responseText, 300, 500);
         });
     }
     

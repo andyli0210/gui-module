@@ -24,6 +24,7 @@ Config.displayRoutes = '';
 Config.displayDays = '';
 
 Config.skipChecker=true;
+Config.hideDeliverySequence=false;
 
 var colors1 = ['#003300', '#CC99FF', '#33CCFF', '#0033FF', '#660000', '#663300', '#669900', '#996600', '#99FF00'];
 var colors2 = ['#009999', '#330099', '#663399', '#66CC99', '#993399', '#CCFF99', '#CCCC99', '#FF6699', '#339999'];

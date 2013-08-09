@@ -22,7 +22,7 @@ IFL.CTS.RouteFilterWidget = function(_options) {
             routeIdMeg = $('<div>Route IDs:</div>');
             routeDayMeg = $('<div>Route Days:</div>');
         } else {
-            message = $('<h4>Select Route ID and Day</h5>');
+            message = $('<h4>Select Route ID and Day</h4>');
             routeIdMeg = $('<div>Route ID:</div>');
             routeDayMeg = $('<div>Route Day:</div>');
         }

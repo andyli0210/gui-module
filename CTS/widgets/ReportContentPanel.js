@@ -2,6 +2,7 @@ IFL.CTS.ReportContentPanel = function(_options) {
     var options;
     var container;
     var checkBoxGroup;
+    var reportNameInput;
 
     var reportContents = ['Summary', 'Route Checking', 'Route Details'];
     
@@ -10,10 +11,13 @@ IFL.CTS.ReportContentPanel = function(_options) {
     function init() {
         container = $('<div/>');
 
-        var message = $('<h5>Generate Report for Schedule: ' + options.optInfo.name + ' Please select report contents:</h5>');
+        var message = $('<h5>Generate Report for Schedule: ' + options.optInfo.name + '<h5><h5>Please select report contents:</h5>');
         checkBoxGroup = new IFL.Widget.CheckboxGroup('reportContents', reportContents, ['Summary'], true);
+        
+        var msg = $('<h5>Input Report Name:</h5>');
+        reportNameInput = $('<input/>').css('width','250px').val(options.optInfo.name + ' report');
 
-        container.append(message).append(checkBoxGroup.getContainer());
+        container.append(message).append(checkBoxGroup.getContainer()).append(msg).append(reportNameInput);
     }
 
     function initOptions() {
@@ -29,7 +33,8 @@ IFL.CTS.ReportContentPanel = function(_options) {
             id: options.optInfo.id,
             includeSummary: false,
             includeRouteChecking: false,
-            includeRouteDetails: false
+            includeRouteDetails: false,
+            reportName: reportNameInput.val()
         }
         var contents = checkBoxGroup.getSelectedItems();
 

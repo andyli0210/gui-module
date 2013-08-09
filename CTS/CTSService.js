@@ -4,19 +4,19 @@ IFL.CTS.CTSService = function(_options) {
     $.extend(true, options, _options);
     var serverUrl = options.ctsServerUrl;
     var currentAccountDetails;
-    
-    var eventHandler = new IFL.Util.EventHandler(['solverResult','ctsOptCreated']);
+
+    var eventHandler = new IFL.Util.EventHandler(['solverResult', 'ctsOptCreated', 'serverError']);
     init();
-    
+
     function init() {
     }
-    
+
     function initDefaultOptions() {
         options = {
             ctsServerUrl: Config.ctsServerUrl
         }
     }
-    
+
     function getAccountDetails(callback) {
         console.info('trying to get current account details...');
         loadingPopup.show('Loading user data......');
@@ -30,14 +30,16 @@ IFL.CTS.CTSService = function(_options) {
                 currentAccountDetails = response.accountDetails;
                 callback(response);
             },
-            error: function() {
-                IFL.Util.showErrorDialog('Error', 'Failed to get account details');
-                loadingPopup.hide();
-                console.error('Failed to get account details !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get account details', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function getGeoStatus(callback) {
         console.info('trying to get geo status...');
         $.ajax({
@@ -48,13 +50,16 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully get geo status: ' + JSON.stringify(response));
                 callback(response);
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error", 'Failed to get geo status ');
-                console.error('Failed to get geo status !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get geo status', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function commitGeoLocations(callback) {
         console.info('trying to commit geo locations...');
         loadingPopup.show('Commiting geo locations......');
@@ -66,19 +71,21 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully commited geo locations: ' + JSON.stringify(response));
                 loadingPopup.hide();
                 callback(response);
-                
+
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error", 'Failed to commit geo locations');
-                loadingPopup.hide();
-                console.error('Failed to commit geo locations !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to commit geo locations', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
-    function checkGeo(callback,parameters) {
+
+    function checkGeo(callback, parameters) {
         console.info('Calling route geo service......');
-        
+
         $.ajax({
             url: serverUrl + '/solver/routegeo/service',
             type: 'POST',
@@ -94,13 +101,16 @@ IFL.CTS.CTSService = function(_options) {
                     pollGeoScenario(response.scenarioId, callback);
                 }
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send Route Geo request');
-                console.error('Route geo service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send Route Geo request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function checkVolume(callback, parameters) {
         console.info('trying to call Volume Checker Service...');
         $.ajax({
@@ -120,13 +130,16 @@ IFL.CTS.CTSService = function(_options) {
                     });
                 }
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send volume check request');
-                console.error('Solver checker service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send volume check request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function getCheckerResult(callback, url) {
         console.info('trying to get checker result at: ' + url);
         $.ajax({
@@ -137,13 +150,16 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully get checker result: ');// + JSON.stringify(response));
                 callback(response);
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to get checker result');
-                console.error('Failed to get checker result !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get checker result', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function checkTime(callback, parameters) {
         console.info('trying to call Time Checker Service...');
         $.ajax({
@@ -163,13 +179,16 @@ IFL.CTS.CTSService = function(_options) {
                     });
                 }
             },
-            error: function() {
-                console.error('Solver checker service Failed !!!');
-                IFL.Util.showErrorDialog("Error",'Failed to send time checker request');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send time checker request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function checkRoute(callback, parameters) {
         console.info('trying to call Route Checker Service...');
         $.ajax({
@@ -189,21 +208,24 @@ IFL.CTS.CTSService = function(_options) {
                     });
                 }
             },
-            error: function() {
-                console.error('Solver checker service Failed !!!');
-                IFL.Util.showErrorDialog("Error",'Failed to send route checker request');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send route checker request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function generateBaseCase(callback, parameters) {
         console.info('trying to call base case Service...');
-        
+
         //for test only
         //getRopResult(callback, serverUrl + '/rop/solution');
         //return;
-        
-        
+
+
         loadingPopup.show('Generating Route Optimisation Solution......');
         $.ajax({
             url: serverUrl + '/solver/rop/service',
@@ -214,36 +236,38 @@ IFL.CTS.CTSService = function(_options) {
             success: function(response) {
                 if (response.isReady) {
                     console.info('Solver processed before, use existing data');
-                    
+
                     //update data quality list at left panel
                     eventHandler.notifyHandlers("solverResult", response);
-                    
+
                     getRopResult(callback, serverUrl + '/rop/solution');
-                //loadingPopup.hide();
+                    //loadingPopup.hide();
                 } else {
                     console.info('Job Accepted, Scenario ID: ' + response.scenarioId);
                     pollRopScenario(response.scenarioId, function(response) {
                         getRopResult(callback, serverUrl + '/rop/solution');
-                    //loadingPopup.hide();
+                        //loadingPopup.hide();
                     });
                 }
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send base case(ROP) request');
-                loadingPopup.hide();
-                console.error('Solver base case(ROP) service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send base case(ROP) request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function generateCtsOpt(callback, groupMember, parameters) {
         console.info('trying to call CTS OPT Service...');
-        
+
         var optRequest = {
             solverParameterList: parameters,
             groupMember: groupMember
         }
-        
+
         loadingPopup.show('Sending CTS request......');
         $.ajax({
             url: serverUrl + '/solver/opt/service',
@@ -261,22 +285,24 @@ IFL.CTS.CTSService = function(_options) {
                     getCtsOptResult(callback, serverUrl + '/opt/info/' + optId);
                 });
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send CTS OPT request');
-                loadingPopup.hide();
-                console.error('Solver base case(ROP) service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send CTS OPT request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function generateDynOpt(callback, groupMember, parameters, selectedTypes) {
         console.info('trying to call Dynamic OPT Service...  input type: ' + selectedTypes.input + ", output type: " + selectedTypes.output);
-        
+
         var optRequest = {
             solverParameterList: parameters,
             groupMember: groupMember
         }
-        
+
         loadingPopup.show('Sending Dynamic OPT request');
         $.ajax({
             url: serverUrl + '/solver/dyn/service?inputType=' + selectedTypes.input + "&outputType=" + selectedTypes.output,
@@ -294,22 +320,24 @@ IFL.CTS.CTSService = function(_options) {
                     getCtsOptResult(callback, serverUrl + '/opt/info/' + optId);
                 });
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send Dynamic OPT request');
-                loadingPopup.hide();
-                console.error('Solver service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send Dynamic OPT request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function generateDynIdOpt(callback, groupMember, parameters, optParameters) {
         console.info('trying to call Dynamic ID OPT Service...  input ID: ' + optParameters.inputId + ", output type: " + optParameters.outputType + ",output name: " + optParameters.outputName);
-        
+
         var optRequest = {
             solverParameterList: parameters,
             groupMember: groupMember
         }
-        
+
         loadingPopup.show('Sending Dynamic ID OPT request');
         $.ajax({
             url: serverUrl + '/solver/dyn/idService?inputId=' + optParameters.inputId + "&outputType=" + optParameters.outputType + "&outputName=" + optParameters.outputName,
@@ -327,22 +355,24 @@ IFL.CTS.CTSService = function(_options) {
                     getCtsOptResult(callback, serverUrl + '/opt/info/' + optId);
                 });
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send Dynamic OPT request');
-                loadingPopup.hide();
-                console.error('Solver service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send Dynamic OPT request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function generateGroOpt(callback, groupMember, parameters) {
         console.info('trying to call GRO OPT Service...');
-        
+
         var optRequest = {
             solverParameterList: parameters,
             groupMember: groupMember
         }
-        
+
         loadingPopup.show('Sending GRO request......');
         $.ajax({
             url: serverUrl + '/solver/gro/service',
@@ -360,14 +390,16 @@ IFL.CTS.CTSService = function(_options) {
                     getCtsOptResult(callback, serverUrl + '/opt/info/' + optId);
                 });
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to send CTS OPT request');
-                loadingPopup.hide();
-                console.error('Solver base case(ROP) service Failed !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to send CTS OPT request', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function getCtsOptResult(callback, url) {
         console.info('trying to get CTS Opt result at: ' + url);
         $.ajax({
@@ -378,13 +410,16 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully get CTS OPT result: ' + JSON.stringify(response));
                 callback(response);
             },
-            error: function() {
-                console.error('Failed to get CTS OPT result result !!!');
-                IFL.Util.showErrorDialog("Error",'Failed to get CTS OPT result result');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get CTS OPT result', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function getCtsOptSolution(optId, callback) {
         var daysParameters = '?route';
         var url = serverUrl + "/opt/solution/" + optId;
@@ -397,13 +432,16 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully get CTS OPT Solution: ');// + JSON.stringify(solution));
                 callback(solution);
             },
-            error: function() {
-                console.error('Failed to get CTS OPT Solution !!!');
-                IFL.Util.showErrorDialog("Error",'Failed to get CTS OPT Solution')
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get CTS OPT Solution', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function getCtsOptParameters(optId, callback) {
         var url = serverUrl + "/opt/info/" + optId + "?noParameters=false";
         console.info('trying to get CTS Opt Parameters at: ' + url);
@@ -415,13 +453,16 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully get CTS OPT parameters ');// + JSON.stringify(solution));
                 callback(response.ctsOptInfo);
             },
-            error: function() {
-                console.error('Failed to get CTS OPT parameters !!!');
-                IFL.Util.showErrorDialog("Error",'Failed to get CTS OPT parameters')
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get CTS OPT parameters', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function deleteCtsOpt(optId, callback) {
         var url = serverUrl + "/opt/delete/" + optId;
         console.info('trying to delete CTS Opt at: ' + url);
@@ -433,13 +474,16 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully deleted CTS OPT');// + JSON.stringify(solution));
                 callback(response);
             },
-            error: function() {
-                console.error('Failed to delete CTS OPT');
-                IFL.Util.showErrorDialog("Error",'Failed to delete CTS OPT: ' + optId + ' at server');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to delete CTS OPT: ' + optId + ' at server', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function getRopResult(callback, url) {
         console.info('trying to get base case(ROP) result at: ' + url);
         $.ajax({
@@ -451,39 +495,41 @@ IFL.CTS.CTSService = function(_options) {
                 callback(response);
                 loadingPopup.hide();
             },
-            error: function() {
-                loadingPopup.hide();
-                IFL.Util.showErrorDialog("Error",'Failed to get base case(ROP) result');
-                console.error('Failed to get base case(ROP) result !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get base case(ROP) result', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
     function pollGeoScenario(scenarioId, callback) {
         var scenarioUrl = serverUrl + '/solver/routegeo/scenarios/' + scenarioId;
         pollUrlResult(scenarioUrl, callback);
     }
-    
+
     function pollCheckerScenario(scenarioId, callback) {
         var scenarioUrl = serverUrl + '/solver/checker/scenarios/' + scenarioId;
         pollUrlResult(scenarioUrl, callback);
     }
-    
+
     function pollRopScenario(scenarioId, callback) {
         var scenarioUrl = serverUrl + '/solver/rop/scenarios/' + scenarioId;
         pollUrlResult(scenarioUrl, callback);
     }
-    
+
     function pollCtsOptScenario(scenarioId, callback) {
         var scenarioUrl = serverUrl + '/solver/opt/scenarios/' + scenarioId;
         pollUrlResult(scenarioUrl, callback);
     }
-    
+
     function pollUrlResult(url, callback) {
-        
+
         console.info('Polling server at url: ' + url + " ......");
         //poll the server randomly between 1 and 3 seconds
-        var poll_intervel = ((Math.random()*3)+1) * 1000;
+        var poll_intervel = ((Math.random() * 3) + 1) * 1000;
         setTimeout(function() {
             $.ajax({
                 url: url,
@@ -498,56 +544,30 @@ IFL.CTS.CTSService = function(_options) {
                         pollUrlResult(url, callback);
                     }
                 },
-                error: function() {
-                    console.error('Server failed for url: ' + url);
-                    IFL.Util.showErrorDialog("Error",'Failed to poll solver result');
+                error: function(xhr, status, error) {
+                    errorHandler("Error", 'Failed to poll solver result at url: ' + url, {
+                        xhr: xhr,
+                        status: status,
+                        error: error
+                    });
                 }
             });
         }, poll_intervel);
     }
-    
+
     function exportSolutionReport(reportContents) {
-        
-        var reportContentParas = 'scheduleId=' + reportContents.id +'&includeSummary=' + reportContents.includeSummary + '&includeRouteChecking=' + reportContents.includeRouteChecking+'&includeRouteDetails=' + reportContents.includeRouteDetails;
+        var reportContentParas = 'scheduleId=' + reportContents.id + '&includeSummary=' + reportContents.includeSummary + '&includeRouteChecking=' + reportContents.includeRouteChecking + '&includeRouteDetails=' + reportContents.includeRouteDetails;
+        reportContentParas += '&reportName=' + reportContents.reportName;
         window.open(serverUrl + "/file/export/solution?" + reportContentParas);
-    //        loadingPopup.show();
-//            $.ajax({
-//                    url: serverUrl + "/export/solution",
-//                    type: 'GET',
-//                    success: function(respnse) {
-//                        loadingPopup.hide();
-//                        //debugger;
-//                    },
-//                    error: function() {
-//                       // loadingPopup.hide();
-//                        alert('Failed to export excel file');
-//                    }
-//            });
-        
     }
-    
+
     function exportExcel() {
-        
         window.open(serverUrl + "/file/export/comparison");
-    //        loadingPopup.show();
-    //        $.ajax({
-    //                url: serverUrl + "/file/export",
-    //                type: 'GET',
-    //                success: function(respnse) {
-    //                    loadingPopup.hide();
-    //                    debugger;
-    //                },
-    //                error: function() {
-    //                    loadingPopup.hide();
-    //                    alert('Failed to export excel file');
-    //                }
-    //        });
-        
     }
-    
+
     function getCtsOptInits(callback) {
         console.info('trying to get cts opt inits...');
-        
+
         loadingPopup.show('Initializing CTS screen......');
         $.ajax({
             url: serverUrl + '/opt/init',
@@ -558,18 +578,20 @@ IFL.CTS.CTSService = function(_options) {
                 loadingPopup.hide();
                 callback(response);
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to init CTS opts');
-                loadingPopup.hide();
-                console.error('Failed to get CTS opt init !!!');
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to init CTS opts', {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
         });
     }
-    
+
     function confirmOpt(optId, callback) {
         console.info('trying to confirm ' + optId + '...');
         loadingPopup.show('Confirming ' + optId + '......');
-        
+
         var confirmUrl;
         if (optId == 'baseCase') {
             confirmUrl = serverUrl + '/checker/confirm';
@@ -578,8 +600,8 @@ IFL.CTS.CTSService = function(_options) {
         } else {
             console.warn('Unknown optmisation id: ' + optId + ' for confirm !!!');
             return;
-        } 
-        
+        }
+
         $.ajax({
             url: confirmUrl,
             type: 'POST',
@@ -589,17 +611,19 @@ IFL.CTS.CTSService = function(_options) {
                 loadingPopup.hide();
                 callback(response);
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to confirm ' + optId);
-                loadingPopup.hide();
-                console.error('Failed to confirm ' + optId);
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to confirm ' + optId, {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
         });
     }
-    
+
     function getSolutionRouteIds(optId, callback) {
         console.info('trying to get route ids for ' + optId + '...');
-        
+
         $.ajax({
             url: serverUrl + '/opt/routeIds/' + optId,
             type: 'GET',
@@ -608,18 +632,21 @@ IFL.CTS.CTSService = function(_options) {
                 console.info('Successfully get solution route ids');
                 callback(routeIds);
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to get solution route ids for ' + optId);
-                console.error('Failed to get solution route ids for ' + optId);
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to get solution route ids for ' + optId, {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
         });
     }
-    
+
     function rerunOpt(optInfo, callback) {
         console.info('trying to ru-run ' + optInfo.name + '...');
-        
+
         loadingPopup.show('Re-run ' + optInfo.name + '......');
-        
+
         var rerunUrl;
         if (optInfo.id == 'baseCase') {
             rerunUrl = serverUrl + '/checker/rerun';
@@ -629,7 +656,7 @@ IFL.CTS.CTSService = function(_options) {
             console.warn('Unknown optmisation id: ' + optInfo.id + ' for re-run !!!');
             return;
         }
-        
+
         $.ajax({
             url: rerunUrl,
             type: 'POST',
@@ -639,18 +666,33 @@ IFL.CTS.CTSService = function(_options) {
                 loadingPopup.hide();
                 callback(response);
             },
-            error: function() {
-                IFL.Util.showErrorDialog("Error",'Failed to re-run ' + optInfo.name);
-                loadingPopup.hide();
-                console.error('Failed to re-run ' + optInfo.name);
+            error: function(xhr, status, error) {
+                errorHandler("Error", 'Failed to re-run ' + optInfo.name, {
+                    xhr: xhr,
+                    status: status,
+                    error: error
+                });
             }
-        })
+        });
     }
-    
+
+    function errorHandler(errorTitle, errorMsg, errorOpts) {
+        loadingPopup.hide();
+
+        //if it's user session timeout, then redirect to login page
+        if (errorOpts.xhr.responseText.indexOf('Login Page') > -1) {
+            window.location.href = "/cts/login";
+        }
+        IFL.Util.showErrorDialog(errorTitle, errorMsg);
+        console.error(errorMsg);
+
+        eventHandler.notifyHandlers('serverError', errorMsg, errorOpts);
+    }
+
     function registerHandler(name, handler) {
         eventHandler.registerHandler(name, handler);
     }
-    
+
     return {
         getAccountDetails: getAccountDetails,
         checkVolume: checkVolume,

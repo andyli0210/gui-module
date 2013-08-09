@@ -70,11 +70,12 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
                 mode: "time",
                 position: 'top',
                 labelWidth: options.labelWidth,
-                labelHeight: options.labelHeight
+                labelHeight: options.labelHeight,
+                timeformat: '%H:%M'
             },
             yaxis: {
                 minTickSize: options.minTickSize,
-                labelWidth: options.labelWidth,
+                labelWidth: 100,
                 show: options.showYaxix,
                 zoomRange: true,
                 min: 0,
@@ -172,7 +173,7 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
 
     function displayRoute(route, dayIndex) {
         
-        dayOffset = dayIndex * 24 * 60 * 60 * 1000;
+        dayOffset = (dayIndex?dayIndex:0) * 24 * 60 * 60 * 1000;
         //debugger;
         var visits = route.visits.visit;
 
