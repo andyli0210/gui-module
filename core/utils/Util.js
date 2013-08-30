@@ -98,7 +98,7 @@ IFL.Util = {
                     resizable: true,
                     title: title,
                     width: dialogWidth ? dialogWidth : 300,
-                    height: dialogHeight ? dialogHeight : 150,
+                    height: dialogHeight ? dialogHeight : 200,
                     //position:'top',
                     close: function(event, ui)
                     {
@@ -665,13 +665,7 @@ IFL.Util = {
             }
         }
     }
-}
-
-//if (JSON.stringify) {
-//    alert('Json stringfy exist!')
-//} else {
-//    alert('Json stringfy does NOT exist!')
-//}
+};
 
 JSON.stringify = JSON.stringify || function(obj) {
     var t = typeof (obj);

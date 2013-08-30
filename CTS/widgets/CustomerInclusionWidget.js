@@ -6,7 +6,9 @@ IFL.CTS.CustomerInclusionWidget = function(_options, groupMember, isRoot) {
     $.extend(true, options, _options);
     
     var treeWidget;
-    var checkBox;
+    var inclusionDropdownList;
+    var applyButton;
+    var includeOptions = ['auto','include','exclude'];
     var memberWidgets = [];
     
     init();
@@ -24,24 +26,39 @@ IFL.CTS.CustomerInclusionWidget = function(_options, groupMember, isRoot) {
     }
     
     function initTreeWidget(isLeaf) {
-        checkBox = $('<input type="checkbox" style="float:right;">').attr('value', groupMember.name).prop("checked", groupMember.isIncluded);
-        var itemSummary = $('<div></div>').append(groupMember.name).append(checkBox);
+        //inclusionDropdownList = $('<input type="checkbox" style="float:right;">').attr('value', groupMember.name).prop("checked", groupMember.isIncluded);
+        
+        inclusionDropdownList = IFL.Widget.DropdownList('isInclude-dropdownlist', includeOptions);
+        if (groupMember.isIncluded) {
+            inclusionDropdownList.selectItem(groupMember.isIncluded);
+        }
+        inclusionDropdownList.registerHandler('change', function(item) {
+            groupMember.isIncluded = item;
+        });
+        
+        if (!isLeaf) {
+            applyButton = $('<button>apply to members</button>').button().css('font-size',10);
+            
+            applyButton.click(function() {
+                var includeStatus = inclusionDropdownList.getSelectedItem();
+                applyToChildren(includeStatus);                
+            });
+        } else {
+            applyButton = $('<div></div>');
+        }
+        
+        var inputSpan = $('<div style="float:right;"/>').append(applyButton).append(inclusionDropdownList.getContainer());
+        var itemSummary = $('<div></div>').append(groupMember.name).append(inputSpan);
         itemSummary.css({
-            height: 20
-        })
+            height: 30
+        });
         
         itemSummary.hover(function() {
             itemSummary.addClass('ui-state-active');
             itemSummary.css('border', 'none');
         }, function() {
             itemSummary.removeClass('ui-state-active');
-        })
-        
-        checkBox.change(function() {
-            applyToChildren($(this).prop("checked"));
-            
-            groupMember.isIncluded = $(this).prop("checked");
-        })
+        });
         
         treeWidget = new IFL.Widget.TreeWidget({
             isRoot: isRoot,
@@ -61,16 +78,16 @@ IFL.CTS.CustomerInclusionWidget = function(_options, groupMember, isRoot) {
         }
     }
     
-    function applyToChildren(isSelected) {
+    function applyToChildren(includeStatus) {
         for (var m in memberWidgets) {
-            memberWidgets[m].setSelected(isSelected);
-            memberWidgets[m].applyToChildren(isSelected);
+            memberWidgets[m].setSelected(includeStatus);
+            memberWidgets[m].applyToChildren(includeStatus);
         }
     }
     
-    function setSelected(isSelected) {
-        checkBox.prop("checked", isSelected);
-        groupMember.isIncluded = isSelected;
+    function setSelected(includeStatus) {
+        inclusionDropdownList.selectItem(includeStatus);
+        groupMember.isIncluded = includeStatus;
     }
     
     function getContainer() {

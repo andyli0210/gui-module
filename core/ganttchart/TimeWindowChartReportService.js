@@ -220,9 +220,30 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
         var earlyStartTime = startVisit.leaveTime + options.UTC_offset;
         var earlyEndTime = endVisit.earliestArriveTime + options.UTC_offset;
         var endIndex = startIndex + 1;
-
+        
         var style = {};
         $.extend(true, style, options.itemStyle);
+        
+        var lastServiceDuration = startVisit.leaveTime - startVisit.earliestArriveTime;;
+        var thisServiceDuration = endVisit.leaveTime - endVisit.earliestArriveTime;
+        
+        var lastestStartTime = startVisit.latestStartTime + lastServiceDuration + options.UTC_offset;
+        var latestEndTime = endVisit.latestStartTime + options.UTC_offset;
+        
+         //create latest service line
+        var latestServiceStartTime = latestEndTime;
+        var latestServiceEndTime = latestServiceStartTime + thisServiceDuration;
+        var latestServiceMarking = new IFL.GanttChart.Marking(latestServiceStartTime, latestServiceEndTime, endIndex, endIndex, '#FF0000', style.fillColor, style.highlightColor, 'line');
+        var lastestServiceItem = {};
+        lastestServiceItem.marking = latestServiceMarking;
+        chartItems.push(lastestServiceItem);
+
+        //create latest travel line item marking
+        var latestTravelMarking = new IFL.GanttChart.Marking(lastestStartTime, latestEndTime, startIndex, endIndex, '#FF0000', style.fillColor, style.highlightColor, 'line');
+        var lastestTravelItem = {};
+        lastestTravelItem.marking = latestTravelMarking;
+        chartItems.push(lastestTravelItem);
+        
         //create earliest travel line item marking
         var earliestTravelmarking = new IFL.GanttChart.Marking(earlyStartTime, earlyEndTime, startIndex, endIndex, '#009933', style.fillColor, style.highlightColor, 'line');
         var earliestTravelItem = {};
@@ -232,15 +253,7 @@ IFL.GanttChart.TimeWindowChartReportService = function(_options) {
         ganttData.push({
             data: [[earlyStartTime, startIndex], [earlyEndTime, endIndex]]
         });
-
-        //create latest travel line item marking
-        var lastestStartTime = startVisit.latestStartTime + options.UTC_offset;
-        var latestEndTime = endVisit.latestStartTime + options.UTC_offset;
-        var latestTravelMarking = new IFL.GanttChart.Marking(lastestStartTime, latestEndTime, startIndex, endIndex, '#FF0000', style.fillColor, style.highlightColor, 'line');
-        var lastestTravelItem = {};
-        lastestTravelItem.marking = latestTravelMarking;
-        chartItems.push(lastestTravelItem);
-
+        
     }
 
 

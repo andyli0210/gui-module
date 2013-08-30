@@ -12,7 +12,7 @@ IFL.CTS.CTSOptPanel = function(_options) {
     var runGroButton;
     var runDynButton;
 
-    var eventHandler = new IFL.Util.EventHandler(['runCts', 'runGro', 'runDyn', 'runDynId', 'report', 'showMap','showRobust']);
+    var eventHandler = new IFL.Util.EventHandler(['runCts', 'runGro', 'runDyn', 'runDynId', 'report', 'showMap', 'showRobust']);
 
     init();
     function init() {
@@ -32,15 +32,8 @@ IFL.CTS.CTSOptPanel = function(_options) {
             eventHandler.notifyHandlers('runCts');
         });
 
-        //hide directly run cts button when user jump to last page directly
-        if (Config.skipChecker) {
-            runOptButton.hide();
-        }
-
-//        runGroButton = $('<button>Run Route Optimisation</button>').button();
-//        runGroButton.click(function() {
-//            eventHandler.notifyHandlers('runGro');
-//        });
+        //hide run cts button since we skip the run optimisation step (that's the default input when click this button)
+        runOptButton.hide();
 
         runDynButton = $('<button>Run Dynamic Optimisation</button>').button();
         runDynButton.click(function() {
@@ -361,27 +354,28 @@ IFL.CTS.CTSOptPanel = function(_options) {
         });
 
         optInfoTable.registerHandler('showMap', function(optInfo) {
-            var mapPara = 'optId=' + optInfo.id + '&depotColor=' + Config.depotColor + '&profitColor=' + Config.profitColor + '&unprofitColor=' + Config.unprofitColor + '&droppedColor=' + Config.droppedColor;
-
-            if (Config.mapZoom) {
-                mapPara += '&mapZoom=' + Config.mapZoom;
-            }
-
-            if (Config.stopZoom) {
-                mapPara += '&stopZoom=' + Config.stopZoom;
-            }
-
-            showMapFilterPopup(optInfo, mapPara);
+            eventHandler.notifyHandlers("showMap", optInfo);
+//            var mapPara = 'optId=' + optInfo.id + '&depotColor=' + Config.depotColor + '&profitColor=' + Config.profitColor + '&unprofitColor=' + Config.unprofitColor + '&droppedColor=' + Config.droppedColor;
+//
+//            if (Config.mapZoom) {
+//                mapPara += '&mapZoom=' + Config.mapZoom;
+//            }
+//
+//            if (Config.stopZoom) {
+//                mapPara += '&stopZoom=' + Config.stopZoom;
+//            }
+//
+//            showMapFilterPopup(optInfo, mapPara);
         });
-        
+
         optInfoTable.registerHandler('showRobust', function(optInfo) {
             var mapPara = 'optId=' + optInfo.id;
             showRobustReportFilterPopup(optInfo, mapPara);
         });
     }
-    
+
     function showRobustReportFilterPopup(optInfo, mapPara) {
-        
+
         var defaultStyleItems = Config.hideDeliverySequence ? ['Scale By Gpad'] : ['Show Delivery Sequence'];
 
         options.ctsService.getSolutionRouteIds(optInfo.id, function(routeIds) {

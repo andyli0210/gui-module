@@ -187,6 +187,38 @@ IFL.MapService.Google = function(mapContainerId) {
 
     }
 
+    function setPolylineExtraStyle(polyline, style) {
+        var polylineOptions = {
+            icons: [{}, {}]
+        };
+
+        //this just set the icon, need create extra window interval in caller
+        if (style.showVehMovement) {
+            var vehLineSymbol = {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                strokeColor: '#0000FF'//'#393'
+            };
+            polylineOptions.icons[0] = {
+                icon: vehLineSymbol,
+                offset: '100%'
+            };
+        }
+
+        if (style.showRouteDirection) {
+            var directionLineSymbol = {
+                path: google.maps.SymbolPath.FORWARD_OPEN_ARROW
+            };
+            polylineOptions.icons[1] = {
+                icon: directionLineSymbol,
+                offset: '10px',
+                repeat: '100px'
+            };
+        }
+        polyline.setOptions(polylineOptions);
+        polyline.normalStyle.icons = polylineOptions.icons;
+    }
+
     function displayPolyline(polyline, isShow) {
         if (isShow) {
             polyline.setMap(map);
@@ -304,16 +336,35 @@ IFL.MapService.Google = function(mapContainerId) {
             eventHandler.notifyHandlers("dragStart", marker);
         });
 
-        displayMarker(marker, true);
+        marker.setMap(map);
 
         return marker;
     }
 
+    function displayMarkers(markers, isShow) {
+        for (var m in markers) {
+            var marker = markers[m];
+            displayMarker(marker, isShow);
+        }
+    }
+
     function displayMarker(marker, isShow) {
-        if (isShow) {
-            marker.setMap(map);
-        } else {
-            marker.setMap(null);
+        marker.setVisible(isShow);
+//        if (isShow) {
+//            marker.setMap(map);
+//        } else {
+//            marker.setMap(null);
+//        }
+        
+        //check the marker label as well
+        if (marker.mapLabel) {
+            if (isShow && marker.showLabel) {
+                $(marker.mapLabel.div_).show();
+                $(marker.mapLabel.span_).show();
+            } else {
+                $(marker.mapLabel.div_).hide();
+                $(marker.mapLabel.span_).hide();
+            }
         }
     }
 
@@ -418,6 +469,33 @@ IFL.MapService.Google = function(mapContainerId) {
         }
     }
 
+    function setDemandPointStyle(marker, style) {
+        if (marker.mapLabel) {
+            if (!style.showLabel) {
+                marker.showLabel = false;
+                $(marker.mapLabel.div_).hide();
+                $(marker.mapLabel.span_).hide();
+            } else {
+                marker.showLabel = true;
+                //only really show it when marker is visible
+                if (marker.getVisible()) {
+                    $(marker.mapLabel.div_).show();
+                    $(marker.mapLabel.span_).show();
+                }
+            }
+        }
+
+        if (style.iconStyle) {
+            var icon = marker.getIcon();
+
+            if (style.iconStyle.scale) {
+                style.iconStyle.scale = (15 + style.iconStyle.scale * 2) * (Config.screenRatio ? Config.screenRatio : 1)
+            }
+            $.extend(true, icon, style.iconStyle);
+            marker.setIcon(icon);
+        }
+    }
+
     function addDemandPoint(lonlat, color, size, label, borderColor, isConfigurable, domain, isClickable) {
         if (label == 0 && isConfigurable) {
             color = '#C0C0C0'
@@ -448,6 +526,10 @@ IFL.MapService.Google = function(mapContainerId) {
             //mapLabel.bindTo('text', marker, 'position');
 
             labels.push(mapLabel);
+            
+            //attach label to the marker and turn on the flag
+            marker.mapLabel = mapLabel;
+            marker.showLabel = true;
         }
 
         if (isConfigurable || isClickable) {
@@ -520,10 +602,6 @@ IFL.MapService.Google = function(mapContainerId) {
         return marker;
     }
 
-    function displayDraggleLayer(isShow) {
-
-    }
-
     function addMapPopup(content, options) {
         var lonlat = getMapLonLat(options.lon, options.lat);
 
@@ -587,11 +665,13 @@ IFL.MapService.Google = function(mapContainerId) {
         map: map,
         drawPolyline: drawPolyline,
         displayPolyline: displayPolyline,
+        setPolylineExtraStyle: setPolylineExtraStyle,
         setRouteService: setRouteService,
         getRoute: getRoute,
         getMapLonLat: getMapLonLat,
         getPolylineBounds: getPolylineBounds,
         displayMarker: displayMarker,
+        displayMarkers: displayMarkers,
         addMarker: addMarker,
         addVisitMarker: addVisitMarker,
         removeMarker: removeMarker,
@@ -607,7 +687,7 @@ IFL.MapService.Google = function(mapContainerId) {
         highlightMarker: highlightMarker,
         highlightPolyline: highlightPolyline,
         addDemandPoint: addDemandPoint,
-        displayDraggleLayer: displayDraggleLayer,
+        setDemandPointStyle: setDemandPointStyle,
         removeMapPopup: removeMapPopup,
         addMapPopup: addMapPopup,
         getMarkerLatlon: getMarkerLatlon,

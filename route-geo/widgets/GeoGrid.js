@@ -26,6 +26,7 @@ IFL.RouteGeo.GeoGrid = function(_options) {
         options = {
             url: Config.geoServerUrl + '/get',
             datatype: 'json',
+            multiSort: true,
             colNames:['ID','Customer Name','Address', 'Suburb','State','Postcode','Lat/Lon', 'Status', 'Run Number', 'Stop Number'],
             colModel :[ 
             {

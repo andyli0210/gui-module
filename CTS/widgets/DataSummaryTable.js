@@ -4,7 +4,7 @@ IFL.CTS.DataSummaryTable = function(_options) {
     $.extend(true, options, _options);
     
     var container;
-    var dataValueField = ['vehicles','routeNum','cusNum','gpad','grossMargin','varCost','fixCost','linehaulCost','volWeek','volMF','distance','duration','droppedCust', 'profitableCust','unprofitableCust','violationNum'];
+    var dataValueField = ['vehicles','routeNum','cusNum','gpad','cpu','grossMargin','varCost','fixCost','linehaulCost','volWeek','volMF','distance','duration','droppedCust', 'profitableCust','unprofitableCust','violationNum'];
     var eventHandler = new IFL.Util.EventHandler(['clickOpt']);
     
     var optColumns = {};
@@ -25,7 +25,8 @@ IFL.CTS.DataSummaryTable = function(_options) {
         var vehiclesRow = $('<tr><th>Vehicles</th></tr>').appendTo(container);
         var routeNumRow = $('<tr><th>Routes Num</th></tr>').appendTo(container);
         var custNumRow = $('<tr><th>Customers Num</th></tr>').appendTo(container);
-        var gpadRow = $('<tr><th>GPAD</th></tr>').appendTo(container);
+        var gpadRow = $('<tr><th>GPAD(T&D)</th></tr>').appendTo(container);
+        var cpuRow = $('<tr><th>GPAD(CPU)</th></tr>').appendTo(container);
         var grossMarginRow = $('<tr><th>Gross Margin</th></tr>').appendTo(container);
         var varCostRow = $('<tr><th>Variable Costs</th></tr>').appendTo(container);
         var fixCostRow = $('<tr><th>Fixed Cost</th></tr>').appendTo(container);

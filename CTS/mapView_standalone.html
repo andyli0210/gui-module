@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--<title>CTS</title>-->
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDRikCDBM62F2WIU6WoWDYPDJLQOlHSCDM&sensor=false"></script>
+
+        <script type="text/javascript" src="../LAB.js"></script> 
+        <script type="text/javascript" src="../IFL.js"></script>
+        <script type="text/javascript" src="../core/Core-Config.js"></script>
+        <script type="text/javascript" src="../core/layout/Layout-config.js"></script>
+        <script type="text/javascript" src="../route-geo/RouteGeo-Config.js"></script>
+        <script type="text/javascript" src="CTS-Config.js"></script>
+        <script type="text/javascript" src="../IFL-Config.js"></script>
+        <script type="text/javascript" src="testData/routeJson.js"></script>
+        <!--<script type="text/javascript" src="testData/batmans-bay-solution.js"></script>-->
+
+        <script type="text/javascript">
+            var loadingPopup;
+            var filterPanel;
+            var dynMapservice;
+            IFL.ready(function() {
+                $(function() {
+                    loadingPopup = new IFL.Widget.LoadingPopup({
+                        popupCss: {
+                            background: 'none repeat scroll 0 0 #FFFFFF',
+                            border: '20px solid #DDDDDD'
+                        }
+                    });
+                    //testInit();
+                    loadFromServer();
+                });
+            });
+
+            function testInit() {
+                filterPanel = new IFL.CTS.ScheduleFilterPanel({
+                    routeOptions: ['route-123', 'route-456', 'route-678']
+                });
+
+                $('#panelContainer').append(filterPanel.getContainer());
+
+                dynMapservice = new IFL.CTS.DynCTSMapService({
+                    mapContainerId: 'mapContainer'
+                });
+                dynMapservice.initWithScheduleSolution(routeJson, routeOptInfo.ctsOptInfo);
+
+                initHandlers();
+            }
+
+            function loadFromServer() {
+                if (!Config.optId) {
+                    IFL.Util.showErrorDialog('No Schedule ID', 'Please specify schedule ID for Map View to display');
+                    return;
+                }
+
+                var ctsService = new IFL.CTS.CTSService();
+
+                ctsService.getSolutionRouteIds(Config.optId, function(routeIds) {
+                    var displayRouteIds = ['Dropped Customer'];
+                    displayRouteIds = displayRouteIds.concat(routeIds);
+                    filterPanel = new IFL.CTS.ScheduleFilterPanel({
+                        routeOptions: displayRouteIds
+                    });
+
+                    $('#panelContainer').append(filterPanel.getContainer());
+
+                    initHandlers();
+                });
+
+                dynMapservice = new IFL.CTS.DynCTSMapService({
+                    mapContainerId: 'mapContainer'
+                });
+                dynMapservice.initWithScheduleId(Config.optId);
+            }
+
+            function initHandlers() {
+                filterPanel.registerHandler('dayChange', function(selected) {
+                    //nothing need to be done when day changed but no routes
+                    if (selected.routes === 0) {
+                        return;
+                    }
+                    dynMapservice.displayAll(false);
+                    dynMapservice.displaySelectedDailyRoutes(selected.routes, selected.day, false);
+                });
+
+                filterPanel.registerHandler('routeChange', function(selected) {
+                    //nothing need to be done when routes changed but no day
+                    if (!selected.day) {
+                        return;
+                    }
+                    dynMapservice.displayAll(false);
+                    dynMapservice.displaySelectedDailyRoutes(selected.routes, selected.day, true);
+                });
+
+                filterPanel.registerHandler('markerStyleChange', function(item, isSelected) {
+                    var style = {};
+                    style[item] = isSelected;
+                    dynMapservice.setCustMarkerStyle(style);
+                });
+
+                filterPanel.registerHandler('routeStyleChange', function(item, isSelected) {
+                    var style = {};
+                    style[item] = isSelected;
+                    dynMapservice.setPolylineStyle(style);
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div id ="panelContainer" style="position: absolute; top: 0px; bottom: 0px; left: 0px; width: 20%; overflow: auto;"></div>
+        <div id ="mapContainer" style="position: absolute; top: 0px; bottom: 0px; width: 80%; right: 0px;"></div>
+    </body>
+</html>

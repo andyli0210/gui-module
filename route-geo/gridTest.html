@@ -13,19 +13,20 @@
             var addressWidget;
             IFL.ready(function() {
                 $(function() {
-                    var myGrid = new IFL.RouteGeo.GeoGrid({containerId: 'list'});
-                    
-                    addressWidget = new IFL.RouteGeo.AddressDetailsWidget();
-                    $('body').append(addressWidget.getContainer());
-                    
-                    addressMatchWidget = new IFL.RouteGeo.AddressMatchWidget();
-                    $('body').append(addressMatchWidget.getContainer());
-                    
-                    addressCriteriaWidget = new IFL.RouteGeo.AddressCriteriaWidget();
-                    $('body').append(addressCriteriaWidget.getContainer());
-                    
-                    addressChosenWidget = new IFL.RouteGeo.AddressChosenWidget();
-                    $('body').append(addressChosenWidget.getContainer());
+                    var myGrid = new IFL.RouteGeo.GeoGrid({containerId: 'list',
+                        url: '/cts/geo/get'});
+
+//                    addressWidget = new IFL.RouteGeo.AddressDetailsWidget();
+//                    $('body').append(addressWidget.getContainer());
+//                    
+//                    addressMatchWidget = new IFL.RouteGeo.AddressMatchWidget();
+//                    $('body').append(addressMatchWidget.getContainer());
+//                    
+//                    addressCriteriaWidget = new IFL.RouteGeo.AddressCriteriaWidget();
+//                    $('body').append(addressCriteriaWidget.getContainer());
+//                    
+//                    addressChosenWidget = new IFL.RouteGeo.AddressChosenWidget();
+//                    $('body').append(addressChosenWidget.getContainer());
                 })
             });
         </script>

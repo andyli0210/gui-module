@@ -29,6 +29,7 @@ IFL.CTS.CustomerParaTabs = function(_options, customerGroups) {
         
         if (options.readonly) {
             $('input', paraTabs.getContainer()).attr('disabled', 'disabled');
+            $('select', paraTabs.getContainer()).attr('disabled', 'disabled');
         }
     }
     

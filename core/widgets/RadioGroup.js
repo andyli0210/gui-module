@@ -15,8 +15,8 @@ IFL.Widget.RadioGroup = function(name, items, defaultItem, isVertical) {
             checked = 'checked';
         }
         
-        var itemRow = $('<input type="radio" name="' + name + '" value="' + item + '" ' + checked + '/>').appendTo(container);
-        container.append(item);
+        var itemRow = $('<input type="radio" name="' + name + '" ' + checked + 'id="' + item  +'" />' + '<label for="' + item + '">' + item + '</label>').appendTo(container);
+        //container.append(item);
         
         if (isVertical) {
             container.append('<br/>');
@@ -29,9 +29,10 @@ IFL.Widget.RadioGroup = function(name, items, defaultItem, isVertical) {
     
     function initHandler() {
         $('input[name=' + name + ']', container).change(function() {
-            var selectedItem = $('input[name=' + name + ']:checked', container).val();
+            var selectedItem = $('label[aria-pressed=true] span', container).text();
+            //var selectedItem = $('input[name=' + name + ']:checked', container).val();
             notifyChangeHandlers(selectedItem);
-        })
+        });
     }
     
     function notifyChangeHandlers(selectedItem) {
@@ -46,14 +47,19 @@ IFL.Widget.RadioGroup = function(name, items, defaultItem, isVertical) {
     }
     
     function getSelectedItem() {
-        var selectedItem = $('input[name=' + name + ']:checked', container).val();
+        //var selectedItem = $('input[name=' + name + ']:checked', container).val();
+        var selectedItem = $('label[aria-pressed=true] span', container).text();
         return selectedItem;
     }
     
     function setSelectedItem(item) {
-        $('input[name=' + name + ']:checked', container).removeAttr('checked');
+        $('label[aria-pressed=true]', container).removeClass('ui-state-active').attr('aria-pressed', false);
         
-        $('input[name=' + name + ']', container).filter("[value="+item+"]").prop('checked', true);
+        $('span:contains("'+ item+'")', container).parent().addClass('ui-state-active').attr('aria-pressed', true);
+        //var selectedItem = $('label span:contains("'+ item+'")', container).prop('aria-pressed', true);
+        //$('input[name=' + name + ']:checked', container).removeAttr('checked');
+        
+        //$('input[name=' + name + ']', container).filter("[value="+item+"]").prop('checked', true);
     }
     
     return {

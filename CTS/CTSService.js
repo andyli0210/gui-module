@@ -262,7 +262,6 @@ IFL.CTS.CTSService = function(_options) {
 
     function generateCtsOpt(callback, groupMember, parameters) {
         console.info('trying to call CTS OPT Service...');
-
         var optRequest = {
             solverParameterList: parameters,
             groupMember: groupMember
@@ -332,7 +331,6 @@ IFL.CTS.CTSService = function(_options) {
 
     function generateDynIdOpt(callback, groupMember, parameters, optParameters) {
         console.info('trying to call Dynamic ID OPT Service...  input ID: ' + optParameters.inputId + ", output type: " + optParameters.outputType + ",output name: " + optParameters.outputName);
-
         var optRequest = {
             solverParameterList: parameters,
             groupMember: groupMember
@@ -420,9 +418,10 @@ IFL.CTS.CTSService = function(_options) {
         });
     }
 
-    function getCtsOptSolution(optId, callback) {
-        var daysParameters = '?route';
-        var url = serverUrl + "/opt/solution/" + optId;
+    function getCtsOptSolution(optId, callback, filterUrl) {
+        var paramterUrl = filterUrl ? '?' + filterUrl : '';
+        var url = serverUrl + "/opt/solution/" + optId + paramterUrl;
+        
         console.info('trying to get CTS Opt Solution at: ' + url);
         $.ajax({
             url: url,
@@ -682,11 +681,13 @@ IFL.CTS.CTSService = function(_options) {
         //if it's user session timeout, then redirect to login page
         if (errorOpts.xhr.responseText.indexOf('Login Page') > -1) {
             window.location.href = "/cts/login";
-        }
-        IFL.Util.showErrorDialog(errorTitle, errorMsg);
-        console.error(errorMsg);
+        } else {
+            IFL.Util.showErrorDialog(errorTitle, errorMsg);
+            console.error(errorMsg);
 
-        eventHandler.notifyHandlers('serverError', errorMsg, errorOpts);
+            eventHandler.notifyHandlers('serverError', errorMsg, errorOpts);
+        }
+
     }
 
     function registerHandler(name, handler) {

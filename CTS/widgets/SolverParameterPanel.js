@@ -68,7 +68,7 @@ IFL.CTS.SolverParameterPanel = function(_options) {
         iterationsSlider = new IFL.CTS.ParaSlider({
             readonly: options.readonly,
             min: 0,
-            max: 2000,
+            max: 10000,
             //unitSuffix: '',
             //unitPre: '$',
             defaultValue: 100,

@@ -37,20 +37,12 @@ IFL.CTS.MapService = function(_options) {
                 });
             } else {
                 console.info('Show Depot Popup');
-                //hard code it for now !!!
-                //request.depot = 'South Coast Dairy';
                 showDepotPopup(request, {
                     x: opts.pageX,
                     y: opts.pageY
                 });
             }
-
-            console.info('Request ID: ' + request.id);
-            showRequestPopup(request, {
-                x: opts.pageX,
-                y: opts.pageY
-            });
-        })
+        });
     }
 
     function displayOptSolution(solution, optInfo, drawOptions) {
@@ -72,6 +64,7 @@ IFL.CTS.MapService = function(_options) {
             var profitableCust = 0;
             var unprofitableCust = 0;
             var runGpad = 0;
+            var runCpu = 0;
             var runMargin = 0;
 
             var vehId = route.vehicles.vehicle.refVehicle.id;
@@ -88,12 +81,13 @@ IFL.CTS.MapService = function(_options) {
                 if (visitLoc.id == 'loc-ANYWHERE') {
                     continue;
                 }
-
-                route.wayPoints.push(visitLoc);
-
                 //extend solution bounds
                 solutionBounds = mapservice.extendToPoint(solutionBounds, visitLoc);
+                
+                //add waypoint
+                route.wayPoints.push(visitLoc);
 
+                //last visit is depot, already render its marker at first visit, so ignore the marker rendering
                 if (v == visits.length - 1) {
                     continue;
                 }
@@ -101,8 +95,6 @@ IFL.CTS.MapService = function(_options) {
                 //the first visit is depot
                 if (v == 0) {
                     depotId = visitLoc.id.split("-")[1];
-
-                    route.wayPoints.push(visitLoc);
                     var depotDomain = optInfo.dataValueList;
                     depotDomain.depot = depotId;
                     depotDomain.id = depotId;
@@ -116,6 +108,12 @@ IFL.CTS.MapService = function(_options) {
                     var requestAttrs = getRequestGpad(request)
                     var gpad = requestAttrs.gpad;
                     var margin = requestAttrs.margin;
+                    
+                    var cpu = 0;
+                    var report = request.report;
+                    if (report) {
+                        cpu = report.cpuGPAD;
+                    }
 
                     if (gpad && Math.abs(gpad) > maxGpad) {
                         maxGpad = Math.abs(gpad);
@@ -130,13 +128,13 @@ IFL.CTS.MapService = function(_options) {
                     });
 
                     runGpad += gpad;
+                    runCpu += cpu;
                     runMargin += margin;
                     if (gpad > 0) {
                         profitableCust++;
                     } else {
                         unprofitableCust++;
                     }
-
                 }
             }
 
@@ -171,6 +169,7 @@ IFL.CTS.MapService = function(_options) {
                 profitableCust: profitableCust,
                 unprofitableCust: unprofitableCust,
                 runGpad: '$' + runGpad.toLocaleString(),
+                runCpu: '$' + runCpu.toLocaleString(),
                 runMargin: '$' + runMargin.toLocaleString(),
                 runLength: hourStr + ':' + minStr,
                 runDistance: runKm
@@ -288,7 +287,6 @@ IFL.CTS.MapService = function(_options) {
         }
     }
 
-
     function getRequestGpad(request) {
         var attributes = request.attributes.attribute;
         var gpadValue = null;
@@ -392,7 +390,8 @@ IFL.CTS.MapService = function(_options) {
             custNum: 'Customer Num',
             profitableCust: 'Profitable Customers',
             unprofitableCust: 'Unprofitable Customers',
-            runGpad: 'GPAD',
+            runGpad: 'GPAD(T&D)',
+            runCpu: 'GPAD(CPU)',
             runMargin: 'Gross Margin',
             runLength: 'Route Duration',
             runDistance: 'Route Distance(KM)'
@@ -435,7 +434,8 @@ IFL.CTS.MapService = function(_options) {
             vehicles: 'Vehicles',
             routeNum: 'Routes Num',
             cusNum: 'Customers Num',
-            gpad: 'GPAD',
+            gpad: 'GPAD(T&D)',
+            cpu: 'GPAD(CPU)',
             grossMargin: 'Gross Margin',
             varCost: 'Variable Costs',
             fixCost: 'Fixed Cost',
@@ -492,11 +492,16 @@ IFL.CTS.MapService = function(_options) {
             gpadStr = '$' + gpadStr;
         }
         
+        var cpuStr = 0;
+        if (request.report) {
+            cpuStr = '$' + request.report.cpuGPAD.toLocaleString();
+        }
+
         var timeWindow = request.windows.window[0];
         var elapsedService = request.elapsedService;
         //var timeStart = formatDate(new Date(timeWindow.timeStart), 'yyyy-MM-dd HH:mm:ss');
         //var timeEnd = formatDate(new Date(timeWindow.timeFinish), 'yyyy-MM-dd HH:mm:ss');
-        
+
         var timeStart = formatDate(new Date(timeWindow.timeStart), 'HH:mm:ss');
         var timeEnd = formatDate(new Date(timeWindow.timeFinish), 'HH:mm:ss');
 
@@ -505,6 +510,7 @@ IFL.CTS.MapService = function(_options) {
             custName: request.refLocation.pk,
             margin: '$' + margin.toLocaleString(),
             gpad: gpadStr,
+            cpu: cpuStr,
             status: request.status,
             duration: elapsedService,
             timeStart: timeStart,
@@ -515,13 +521,14 @@ IFL.CTS.MapService = function(_options) {
             id: 'ID',
             custName: 'Customer Name',
             margin: 'Gross Margin',
-            gpad: 'GPAD',
+            gpad: 'GPAD(T&D)',
+            cpu: 'GPAD(CPU)',
             status: 'Serviced by',
             duration: 'Service Duration(min)',
             timeStart: 'Time Window Start',
             timeEnd: 'Time Window End'
         };
-        
+
         if (attributes[5] && attributes[5] != 'OK') {
             domain['dropReason'] = attributes[5].value;
             nameMapping['dropReason'] = 'Drop Reason';

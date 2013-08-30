@@ -27,7 +27,7 @@ var coreConfig = {
     mapvisScripts: ['visoperator/VisEvents','visoperator/VisOperator'],
     mapserviceScripts: ['EMSMapService', 'GoogleMapService'],
     routeserviceScripts: ['LcpService', 'FakeLcpService'],
-    utilScripts:['Util','EventHandler', 'DateTime', 'Enum'],
+    utilScripts:['Util','EventHandler', 'DateTime', 'Enum', 'IFLNameUtil'],
     treeviewScripts: ['jquery.treeview'],
     jgridScripts: ['jquery.jqGrid.min','grid.locale-en'],
     widgetsScripts: ['SidePanel', 'RadioGroup', 'CheckboxGroup', 'FolderWidget', 'ButtonPanel', 'ListWidget','ListControlPanel', 'DomainTable', 'DomainPopup','DropdownList','Pager','DomainListTable', 'GanttChartTable','DomainListEditor','DynamicListTable','Tabs','DateFilter','LoadingPopup','FileUploadPanel','TreeWidget','VerticalSlidePanel'],
